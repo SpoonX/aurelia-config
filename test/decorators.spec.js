@@ -7,7 +7,7 @@ import {InjectTest, InjectTestGlobal} from './resources/injectTest';
 
 describe('decorators', function() {
   describe('@configFor()', function() {
-    it('should register a config with Config', function(done) {
+    it('should register a config', function(done) {
       let aurelia = getAurelia();
 
       configure(aurelia, function(config) {
