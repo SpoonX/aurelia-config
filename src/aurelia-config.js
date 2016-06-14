@@ -1,32 +1,32 @@
-import {Config} from './config';
-import {configFor, GetConfig} from './decorators';
+import {ConfigManager} from './configManager';
+import {registerConfig, Config} from './decorators';
 import {GlobalConfig} from './globalConfig';
 
 /**
  * configure aurelia-config
  * @param  {Aurelia}         aurelia           The aurelia instance
  * @param  {function|Object} configOrConfigure The configuration object or function
- * @return {Config}                            The aurelia-config Config instance
+ * @return {ConfigManager}                     The ConfigManager instance
  */
 function configure(aurelia, configOrConfigure) {
-  let config = aurelia.container.get(Config);
+  let configManager = aurelia.container.get(ConfigManager);
 
   if (typeof configOrConfigure === 'function') {
-    configOrConfigure(config);
+    configOrConfigure(configManager);
   } else {
-    config.configure(configOrConfigure);
+    configManager.configure(configOrConfigure);
   }
 
   // get GlobalConfig initialzed and registered
   aurelia.container.get(GlobalConfig);
 
-  return config;
+  return configManager;
 }
 
 export {
-  Config,
+  ConfigManager,
   configure,
-  configFor,
-  GetConfig,
+  registerConfig,
+  Config,
   GlobalConfig
 };

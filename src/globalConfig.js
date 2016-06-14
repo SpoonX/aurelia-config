@@ -1,6 +1,6 @@
-import {configFor} from './decorators';
+import {registerConfig} from './decorators';
 
-@configFor('global')
+@registerConfig('global')
 export class GlobalConfig {
   /* */
 }

@@ -1,7 +1,7 @@
-import {configFor} from '../../src/decorators';
-import {Config} from '../../src/config';
+import {registerConfig} from '../../src/decorators';
+import {ConfigManager} from '../../src/configManager';
 
-@configFor('inject-test')
+@registerConfig('inject-test')
 export class TestConfig {
   key = 'value';
 }
@@ -11,6 +11,6 @@ export class TestManualConfig {
   key = 'value';
 
   constructor() {
-    Config.register('manual', TestManualConfig);
+    ConfigManager.register('manual', TestManualConfig);
   }
 }

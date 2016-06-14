@@ -1,14 +1,14 @@
 import {resolver} from 'aurelia-dependency-injection';
-import {Config} from './config';
+import {ConfigManager} from './configManager';
 
 /**
- * Register a Config with aurelia-config
- * @param {string} key The key for this config
- * @return {function} wrapper function to the class
+ * Register a Config with the ConfigManager
+ * @param {string} key     The key for this config
+ * @return {function}      The wrapper function to the class
  */
-export function configFor(key) {
+export function registerConfig(key) {
   return function(target) {
-    Config.register(key, target);
+    ConfigManager.register(key, target);
   };
 }
 
@@ -17,7 +17,7 @@ export function configFor(key) {
  * DoConfig class. A resolver for configs which allows injection of the corresponding registered config into a class
  */
 @resolver()
-export class GetConfig {
+export class Config {
 
   /**
    * Construct the resolver with the specified key.
@@ -33,15 +33,15 @@ export class GetConfig {
    * @return {any}                The registered config instance
    */
   get(container) {
-    return container.get(Config).getConfig(container, this._key);
+    return container.get(ConfigManager).getConfig(container, this._key);
   }
 
   /**
    * Get a new resolver.
-   * @param {string}      key The config key (default: 'global')
-   * @return {GetConfig}      Resolves to the config for this 'key'
+   * @param {string} key The config key (default: 'global')
+   * @return {Config}    Resolves to the config for this 'key'
    */
   static of(key = 'global') {
-    return new GetConfig(key);
+    return new Config(key);
   }
 }

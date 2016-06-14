@@ -1,4 +1,4 @@
-import {configure, Config, GlobalConfig} from '../src/aurelia-config';
+import {configure, ConfigManager, GlobalConfig} from '../src/aurelia-config';
 import {Aurelia} from 'aurelia-framework';
 import {DefaultLoader} from 'aurelia-loader-default';
 import {Container} from 'aurelia-dependency-injection';
@@ -6,19 +6,17 @@ import {TestConfig} from './resources/testConfig';
 import {InjectTest, InjectTestGlobal} from './resources/injectTest';
 
 describe('decorators', function() {
-  describe('@configFor()', function() {
+  describe('@registerConfig()', function() {
     it('should register a config', function(done) {
       let aurelia = getAurelia();
 
-      configure(aurelia, function(config) {
-        expect(config instanceof Config).toBe(true);
-
+      configure(aurelia, function(configManager) {
         aurelia.start().then(()=>{
           let container = aurelia.container;
           let testConfig = container.get(TestConfig);
 
           expect(testConfig instanceof TestConfig).toBe(true);
-          expect(Config.map['inject-test']).toBe(TestConfig);
+          expect(ConfigManager.map['inject-test']).toBe(TestConfig);
 
           done();
         });
@@ -26,13 +24,11 @@ describe('decorators', function() {
     });
   });
 
-  describe('@GetConfig.of()', function() {
+  describe('@Config.of()', function() {
     it('should fail to get unregister config', function(done) {
       let aurelia = getAurelia();
 
-      configure(aurelia, function(config) {
-        expect(config instanceof Config).toBe(true);
-
+      configure(aurelia, function(configManager) {
         aurelia.start().then(()=>{
           let container = aurelia.container;
           let fail = () => container.get(injectTest);
@@ -48,8 +44,6 @@ describe('decorators', function() {
       let aurelia = getAurelia();
 
       configure(aurelia, function(config) {
-        expect(config instanceof Config).toBe(true);
-
         aurelia.start().then(()=>{
           let container = aurelia.container;
           let testConfig = container.get(TestConfig);
@@ -71,8 +65,6 @@ describe('decorators', function() {
       let aurelia = getAurelia();
 
       configure(aurelia, function(config) {
-        expect(config instanceof Config).toBe(true);
-
         aurelia.start().then(()=>{
           let container = aurelia.container;
           let injectTestGlobal = container.get(InjectTestGlobal);

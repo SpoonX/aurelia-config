@@ -1,21 +1,22 @@
-import {Config, GlobalConfig} from '../src/aurelia-config';
+import {ConfigManager} from '../src/configManager';
+import {GlobalConfig} from '../src/globalConfig';
 import {TestManualConfig} from './resources/testConfig';
 import {Container} from 'aurelia-dependency-injection';
 
-describe('Config', function() {
+describe('ConfigManager', function() {
   describe('.register()', function() {
     it('should register a config manually', function() {
       let container = getContainer();
       let testManualConfig = container.get(TestManualConfig);
 
       expect(testManualConfig instanceof TestManualConfig).toBe(true);
-      expect(Config.map['manual']).toBe(TestManualConfig);
+      expect(ConfigManager.map['manual']).toBe(TestManualConfig);
     });
   });
 
   describe('.configure()', function() {
     it('Should configure with defaults', function() {
-      let config   = new Config;
+      let config   = new ConfigManager;
       let returned = config.configure();
 
       expect(returned).toBe(config);
@@ -25,7 +26,7 @@ describe('Config', function() {
   describe('.getConfig()', function() {
     it('Should get gloabl config', function() {
       let container = getContainer();
-      let config = container.get(Config);
+      let config = container.get(ConfigManager);
 
       expect(config.getConfig(container) instanceof GlobalConfig).toBe(true);
       expect(config.getConfig(container)).toBe(container.get(GlobalConfig));
@@ -33,7 +34,7 @@ describe('Config', function() {
 
     it('Should get config by name', function() {
       let container = getContainer();
-      let config = container.get(Config);
+      let config = container.get(ConfigManager);
       let testManualConfig = container.get(TestManualConfig);
 
       expect(config.getConfig(container, 'manual') instanceof TestManualConfig).toBe(true);
