@@ -68,7 +68,10 @@ export class Test {
   }
 }
 
-// inject the global config
+/*
+  For convenience there is a GlobalConfig instance which you can use
+ */
+// inject the GlobalConfig
 @inject(GetConfig.of())
 export class TestGlobal {
   constructor(config) {

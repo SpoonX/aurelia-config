@@ -1,4 +1,4 @@
-import {configure, Config} from '../src/aurelia-config';
+import {configure, Config, GlobalConfig} from '../src/aurelia-config';
 import {Aurelia} from 'aurelia-framework';
 import {DefaultLoader} from 'aurelia-loader-default';
 import {Container} from 'aurelia-dependency-injection';
@@ -55,6 +55,11 @@ describe('decorators', function() {
           let testConfig = container.get(TestConfig);
           let injectTest = container.get(InjectTest);
 
+          expect(injectTest.config instanceof TestConfig).toBe(true);
+          expect(injectTest.config).toBe(testConfig);
+
+          testConfig.foo = 'bar';
+
           expect(injectTest.config).toBe(testConfig);
 
           done();
@@ -62,7 +67,7 @@ describe('decorators', function() {
       });
     });
 
-    it('should get register config', function(done) {
+    it('should get global config', function(done) {
       let aurelia = getAurelia();
 
       configure(aurelia, function(config) {
@@ -72,7 +77,14 @@ describe('decorators', function() {
           let container = aurelia.container;
           let injectTestGlobal = container.get(InjectTestGlobal);
 
+          // GlobalConfig should have been regirster in configure
+          expect(injectTestGlobal.config instanceof GlobalConfig).toBe(true);
           expect(JSON.stringify(injectTestGlobal.config)).toBe('{}');
+
+          let globalConfig = container.get(GlobalConfig);
+          globalConfig.foo = 'bar';
+
+          expect(injectTestGlobal.config).toBe(globalConfig);
 
           done();
         });

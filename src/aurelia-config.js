@@ -1,5 +1,6 @@
 import {Config} from './config';
 import {configFor, GetConfig} from './decorators';
+import {GlobalConfig} from './globalConfig';
 
 /**
  * configure aurelia-config
@@ -16,6 +17,9 @@ function configure(aurelia, configOrConfigure) {
     config.configure(configOrConfigure);
   }
 
+  // get GlobalConfig initialzed and registered
+  aurelia.container.get(GlobalConfig);
+
   return config;
 }
 
@@ -23,5 +27,6 @@ export {
   Config,
   configure,
   configFor,
-  GetConfig
+  GetConfig,
+  GlobalConfig
 };
