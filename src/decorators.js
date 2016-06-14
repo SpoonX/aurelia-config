@@ -1,5 +1,6 @@
 import {resolver} from 'aurelia-dependency-injection';
 import {Config} from './config';
+import * as LogManager from 'aurelia-logging';
 
 /**
  * Register a Config with aurelia-config
@@ -8,6 +9,7 @@ import {Config} from './config';
  */
 export function configFor(key) {
   return function(target) {
+    LogManager.getLogger('aurelia-config').info(`Registered config: ${key} `);
     Config.map[key] = target;
   };
 }
