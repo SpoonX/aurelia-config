@@ -29,7 +29,7 @@ export class Config {
       return;
     }
 
-    throw new Error(`Config.register: ${key} already used for a different type.`)
+    throw new Error(`Config.register: ${key} already used for a different type.`);
   }
 
 
@@ -49,7 +49,7 @@ export class Config {
    * @param  {string}    key       The key of the config
    * @return {any}                 The selected config instance
    */
-  getConfig(container, key) {
+  getConfig(container, key = 'global') {
     return container.get(Config.map[key]);
   }
 }

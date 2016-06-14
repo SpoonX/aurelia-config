@@ -11,6 +11,6 @@ export class TestManualConfig {
   key = 'value';
 
   constructor() {
-    Config.register('manual', TestManualConfig)
+    Config.register('manual', TestManualConfig);
   }
 }

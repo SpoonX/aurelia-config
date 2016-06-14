@@ -1,4 +1,4 @@
-import {Config} from '../src/aurelia-config';
+import {Config, GlobalConfig} from '../src/aurelia-config';
 import {TestManualConfig} from './resources/testConfig';
 import {Container} from 'aurelia-dependency-injection';
 
@@ -23,11 +23,20 @@ describe('Config', function() {
   });
 
   describe('.getConfig()', function() {
+    it('Should get gloabl config', function() {
+      let container = getContainer();
+      let config = container.get(Config);
+
+      expect(config.getConfig(container) instanceof GlobalConfig).toBe(true);
+      expect(config.getConfig(container)).toBe(container.get(GlobalConfig));
+    });
+
     it('Should get config by name', function() {
       let container = getContainer();
       let config = container.get(Config);
       let testManualConfig = container.get(TestManualConfig);
 
+      expect(config.getConfig(container, 'manual') instanceof TestManualConfig).toBe(true);
       expect(config.getConfig(container, 'manual')).toBe(testManualConfig);
     });
   });
