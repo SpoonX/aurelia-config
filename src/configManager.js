@@ -7,26 +7,26 @@ import * as LogManager from 'aurelia-logging';
 export class ConfigManager {
 
   /**
-   * Registered Configs
-   * @type {Object} map A map of config key vs Config contructors
+   * Registered Config classes
+   * @type {Object} map A map of config key vs Config classes
    */
   static map = {};
 
  /**
    * Register a Config
-   * @param  {string}   key               identifier for the config
-   * @param  {function} configConstructor construtor function for the config
+   * @param  {string}   key    identifier for the Config class
+   * @param  {function} Config The Config class to register
    */
-  static register(key, configConstructor) {
+  static register(key, Config) {
     if (ConfigManager.map[key] === undefined) {
-      ConfigManager.map[key] = configConstructor;
+      ConfigManager.map[key] = Config;
 
       LogManager.getLogger('aurelia-config').info(`Registered config: ${key}`);
       return;
     }
     LogManager.getLogger('aurelia-config').warn(`ConfigManager: ${key} already registerd`);
 
-    if (ConfigManager.map[key] === configConstructor) {
+    if (ConfigManager.map[key] === Config) {
       LogManager.getLogger('aurelia-config').warn(`ConfigManager: ${key} already registerd`);
       return;
     }
@@ -37,8 +37,8 @@ export class ConfigManager {
 
   /**
    * Configuration function
-   * @param  {[Object]} incomming The configuration object
-   * @return {ConfigManager}   itself
+   * @param  {[Object]}       incomming The configuration object
+   * @return {ConfigManager}            itself
    * @chainable
    */
   configure(incomming = {}) {
@@ -46,10 +46,10 @@ export class ConfigManager {
   }
 
   /**
-   * Get the config instance for 'key'
+   * Get the Config instance for 'key'
    * @param  {Container} container The container instance
-   * @param  {[string]}  key       The key of the config. default='global'
-   * @return {any}                 The selected config instance
+   * @param  {[string]}  key       The key of the Config. default='global'
+   * @return {any}                 The selected Config instance
    */
   getConfig(container, key = 'global') {
     return container.get(ConfigManager.map[key]);

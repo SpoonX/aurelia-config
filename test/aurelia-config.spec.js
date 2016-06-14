@@ -1,4 +1,4 @@
-import {configure, ConfigManager, registerConfig, Config} from '../src/aurelia-config';
+import {configure, ConfigManager, registerConfig, ConfigResolver} from '../src/aurelia-config';
 import {Aurelia} from 'aurelia-framework';
 import {DefaultLoader} from 'aurelia-loader-default';
 import {Container} from 'aurelia-dependency-injection';
@@ -14,8 +14,8 @@ describe('aurelia-config', function() {
     it('Should export registerConfig', function() {
       expect(registerConfig).toBeDefined();
     });
-    it('Should export Config', function() {
-      expect(Config).toBeDefined();
+    it('Should export ConfigResolver', function() {
+      expect(ConfigResolver).toBeDefined();
     });
   });
 

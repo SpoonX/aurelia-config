@@ -24,7 +24,7 @@ describe('decorators', function() {
     });
   });
 
-  describe('@Config.of()', function() {
+  describe('@ConfigResolver.of()', function() {
     it('should fail to get unregister config', function(done) {
       let aurelia = getAurelia();
 

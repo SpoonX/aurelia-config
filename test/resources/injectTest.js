@@ -1,14 +1,14 @@
-import {Config} from '../../src/decorators';
+import {ConfigResolver} from '../../src/decorators';
 import {inject} from 'aurelia-dependency-injection';
 
-@inject(Config.of('inject-test'))
+@inject(ConfigResolver.of('inject-test'))
 export class InjectTest {
   constructor(config) {
     this.config = config;
   }
 }
 
-@inject(Config.of())
+@inject(ConfigResolver.of())
 export class InjectTestGlobal {
   constructor(config) {
     this.config = config;

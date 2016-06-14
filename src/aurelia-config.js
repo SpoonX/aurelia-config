@@ -1,5 +1,5 @@
 import {ConfigManager} from './configManager';
-import {registerConfig, Config} from './decorators';
+import {registerConfig, ConfigResolver} from './decorators';
 import {GlobalConfig} from './globalConfig';
 
 /**
@@ -27,6 +27,6 @@ export {
   ConfigManager,
   configure,
   registerConfig,
-  Config,
+  ConfigResolver,
   GlobalConfig
 };

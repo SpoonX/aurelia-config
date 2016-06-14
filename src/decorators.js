@@ -3,7 +3,7 @@ import {ConfigManager} from './configManager';
 
 /**
  * Register a Config with the ConfigManager
- * @param {string} key     The key for this config
+ * @param {string} key     The key for a Config class
  * @return {function}      The wrapper function to the class
  */
 export function registerConfig(key) {
@@ -14,10 +14,12 @@ export function registerConfig(key) {
 
 
 /**
- * DoConfig class. A resolver for configs which allows injection of the corresponding registered config into a class
+ * ConfigResolver class.
+ * A resolver for Config classes which allows injection of the corresponding
+ * registered Config instance into a class
  */
 @resolver()
-export class Config {
+export class ConfigResolver {
 
   /**
    * Construct the resolver with the specified key.
@@ -28,9 +30,9 @@ export class Config {
   }
 
   /**
-   * Get registered config instance .
+   * Get registered Config instance .
    * @param {Container} container The container instance
-   * @return {any}                The registered config instance
+   * @return {any}                The registered Config instance
    */
   get(container) {
     return container.get(ConfigManager).getConfig(container, this._key);
@@ -38,10 +40,10 @@ export class Config {
 
   /**
    * Get a new resolver.
-   * @param {string} key The config key (default: 'global')
-   * @return {Config}    Resolves to the config for this 'key'
+   * @param {string}          key The Config class key (default: 'global')
+   * @return {ConfigResolver}     Resolves to the Config for this 'key'
    */
   static of(key = 'global') {
-    return new Config(key);
+    return new ConfigResolver(key);
   }
 }
