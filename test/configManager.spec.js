@@ -3,7 +3,7 @@ import {Aurelia} from 'aurelia-framework';
 import {DefaultLoader} from 'aurelia-loader-default';
 import {Container} from 'aurelia-dependency-injection';
 import {Config} from './resources/testConfig';
-import {Config as OtherConfig} from './resources/otherTestConfig';
+import {OtherConfig} from './resources/otherTestConfig';
 
 describe('configManager', function() {
   describe('configure with globalRegister', function() {
@@ -14,7 +14,7 @@ describe('configManager', function() {
       configure(aurelia, {
         plugins: [
           {moduleId: 'test/resources/testConfig', alias: 'plugin-config', config: {data:'xy'}},
-          {moduleId: 'test/resources/otherTestConfig', config: {data:'xy'}},
+          {moduleId: 'test/resources/otherTestConfig', className: 'OtherConfig', config: {data:'xy'}},
           {moduleId: 'global-config', config: {data:'xy'}}
         ]
       });
@@ -83,7 +83,7 @@ describe('configManager', function() {
       configure(aurelia, {
         plugins: [
           {moduleId: 'test/resources/testConfig', alias: 'plugin-config', config: {data:'xy'}},
-          {moduleId: 'test/resources/otherTestConfig', config: {data:'xy'}},
+          {moduleId: 'test/resources/otherTestConfig', className: 'OtherConfig', config: {data:'xy'}},
           {moduleId: 'global-config', config: {data:'xy'}}
         ],
         registerAlias: false
@@ -134,7 +134,7 @@ describe('configManager', function() {
 
     it('Should have registered and merged Config with ConfigManager and default alias', function(done) {
       aurelia.start().then(()=>{
-        let configByConfigManager = aurelia.container.get(ConfigManager).configs['test\/resources\/otherTestConfig-config'];
+        let configByConfigManager = aurelia.container.get(ConfigManager).configs['test/resources/otherTestConfig-config'];
         expect(configByConfigManager instanceof OtherConfig).toBe(true);
         expect(JSON.stringify(configByConfigManager)).toBe(JSON.stringify({key: 'value', data: 'xy'}));
         done();

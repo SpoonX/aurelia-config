@@ -12,6 +12,10 @@ This library is an unofficial plugin for the [Aurelia](http://www.aurelia.io/) p
 
 This library is used by plugins and applications.
 
+## Installation for plugin developers
+
+There isn't much to do. Just tell the users to add it to the plugin list for aurelia-config and make sure your plugin exports an class or object named 'Config' (default). The user settings will get merged into that class or object.
+
 ## Installation for applications
 
 Installing this module is fairly simple.
@@ -22,7 +26,7 @@ Run `jspm i aurelia-config` from your project root or `npm i aurelia-config --sa
 
 ### Configuring the plugin
 
-You can specify which plugin configs you want to register and add the data you want to get merged into the configs of the plugins.
+You can specify which plugin configs class you want to register and add the data you want to get merged into the configs of the plugins.
 
 ```js
 export function configure(aurelia) {
@@ -31,23 +35,29 @@ export function configure(aurelia) {
     .developmentLogging()
     .plugin('aurelia-config', {
       plugins: [
-        // {module: moduleId, config: configObject, alias: 'an-alias'}
-        {moduleId: 'aurelia-api', config: {key:'xy'}}, // default alias is ${moduleId}-config
+        // {
+        // module:    moduleId,     // The plugin moduleId
+        // config:    configObject, // The config object you want to merge into
+        //                             the plugins config
+        // alias:     'an-alias',   // The alias/key (default: ${moduleId}-config)
+        //                             (used for registration in the ConfigManager
+        //                             and the container, if applicable
+        // className: 'ClassName'   // The class name (default: 'Config') of the
+        //                             config object that will be imported from
+        //                             the plugin 
+        // }
+        {moduleId: 'aurelia-api', config: {key:'xy'}, className: 'Config'},
         {moduleId: 'aurelia-authorization', alias: 'authorization-config', config: {data:'xy'}},
-        {moduleId: 'global-config', config: {title:'xy'}}
+        {moduleId: 'global-config', config: {title:'xy'}} // You also can the build-in config named 'global-config'
       ],
-      registerAlias: true   // allows injection by alias (default: true)
+      registerAlias: true   // Allows injection by alias (default: true)
     })
-    /* your other plugins */
+    /* Your other plugins */
 );
 
   aurelia.start().then(() => aurelia.setRoot());
 }
 ```
-
-## Installation for plugin developers
-
-There isn't much to do. Just tell the users to add it to the plugin list for aurelia-config and make sure your plugin exports an class or object named 'Config'. The user settings will get merged into that class or object.
 
 ### Usage
 
@@ -93,6 +103,9 @@ export class Foo {
 There also is a global config. Use it like any other Config. It's alias is 'global-config'.
 
 ```js
+// the type is 'GlobalConfig'
+//import {GlobalConfig} from 'aurelia-config';  
+
 @inject('global-config')
 export class Foo {
   constructor(config) {

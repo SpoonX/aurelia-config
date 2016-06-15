@@ -1,3 +1,3 @@
-export class Config {
+export class OtherConfig {
   key = 'value';
 }

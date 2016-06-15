@@ -39,14 +39,16 @@ export class ConfigManager {
         extend(true, this.configs[GLOBAL_CONFIG_ID], module.config || {});
         return;
       }
+      let ConfigClassName = module.className ? module.className : 'Config';
+
       this.aurelia.loader.loadModule(module.moduleId).then(m => {
-        if ('Config' in m) {
-          let config = this.aurelia.container.get(m.Config);
+        if (ConfigClassName in m) {
+          let config = this.aurelia.container.get(m[ConfigClassName]);
           let id     = module.alias ? module.alias : `${module.moduleId}-config`;
 
           this.configs[id] = extend(true, config, module.config || {});
           if (registerAlias) {
-            this.aurelia.container.registerAlias(m.Config, id);
+            this.aurelia.container.registerAlias(m[ConfigClassName], id);
           }
 
           logger.info(`Registered and configured config for plugin ${module.moduleId}.`);
