@@ -1,3 +1,5 @@
-export class OtherConfig {
-  key = 'value';
+import {BaseConfig} from '../../src/baseConfig';
+
+export class OtherConfig extends BaseConfig {
+  defaults = {key: 'value'};
 }

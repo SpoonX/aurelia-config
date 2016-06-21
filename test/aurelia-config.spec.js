@@ -30,6 +30,20 @@ describe('aurelia-config', function() {
       expect(config instanceof ConfigManager).toBe(true);
     });
   });
+
+  describe('configure()', function() {
+    it('Should fail to configure plugins with same ids', function(done) {
+      configure(getAurelia(), {
+        plugins: [
+          {moduleId: 'test/resources/testConfig', alias: 'plugin-config', config: {data:'xy'}},
+          {moduleId: 'test/resources/otherTestConfig', className: 'OtherConfig', alias: 'plugin-config', config: {data:'xy'}}
+        ]
+      }).catch(e => {
+        expect(e instanceof Error).toBe(true);
+        done();
+      });
+    });
+  });
 });
 
 function getAurelia() {

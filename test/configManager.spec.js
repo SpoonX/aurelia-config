@@ -1,4 +1,4 @@
-import {ConfigManager, configure, GlobalConfig} from '../src/aurelia-config';
+import {ConfigManager, configure, GlobalConfig, BaseConfig} from '../src/aurelia-config';
 import {Aurelia} from 'aurelia-framework';
 import {DefaultLoader} from 'aurelia-loader-default';
 import {Container} from 'aurelia-dependency-injection';
@@ -24,7 +24,8 @@ describe('configManager', function() {
       aurelia.start().then(()=>{
         let configGlobal = aurelia.container.get('global-config');
         expect(configGlobal instanceof GlobalConfig).toBe(true);
-        expect(JSON.stringify(configGlobal)).toBe(JSON.stringify({data: 'xy'}));
+        expect(configGlobal instanceof BaseConfig).toBe(true);
+        expect(JSON.stringify(configGlobal.current)).toBe(JSON.stringify({data: 'xy'}));
         done();
       });
     });
@@ -33,7 +34,8 @@ describe('configManager', function() {
       aurelia.start().then(()=>{
         let configByAlias = aurelia.container.get('plugin-config');
         expect(configByAlias instanceof Config).toBe(true);
-        expect(JSON.stringify(configByAlias)).toBe(JSON.stringify({key: 'value', data: 'xy'}));
+        expect(configByAlias instanceof BaseConfig).toBe(true);
+        expect(JSON.stringify(configByAlias.current)).toBe(JSON.stringify({key: 'value', data: 'xy'}));
         done();
       });
     });
@@ -42,7 +44,8 @@ describe('configManager', function() {
       aurelia.start().then(()=>{
         let configByClass = aurelia.container.get(Config);
         expect(configByClass instanceof Config).toBe(true);
-        expect(JSON.stringify(configByClass)).toBe(JSON.stringify({key: 'value', data: 'xy'}));
+        expect(configByClass instanceof BaseConfig).toBe(true);
+        expect(JSON.stringify(configByClass.current)).toBe(JSON.stringify({key: 'value', data: 'xy'}));
         done();
       });
     });
@@ -50,8 +53,10 @@ describe('configManager', function() {
     it('Should have registered and merged Config with ConfigManager', function(done) {
       aurelia.start().then(()=>{
         let configByConfigManager = aurelia.container.get(ConfigManager).configs['plugin-config'];
+
         expect(configByConfigManager instanceof Config).toBe(true);
-        expect(JSON.stringify(configByConfigManager)).toBe(JSON.stringify({key: 'value', data: 'xy'}));
+        expect(configByConfigManager instanceof BaseConfig).toBe(true);
+        expect(JSON.stringify(configByConfigManager.current)).toBe(JSON.stringify({key: 'value', data: 'xy'}));
         done();
       });
     });
@@ -60,7 +65,8 @@ describe('configManager', function() {
       aurelia.start().then(()=>{
         let configByModuleId = aurelia.container.get('test\/resources\/otherTestConfig-config');
         expect(configByModuleId instanceof OtherConfig).toBe(true);
-        expect(JSON.stringify(configByModuleId)).toBe(JSON.stringify({key: 'value', data: 'xy'}));
+        expect(configByModuleId instanceof BaseConfig).toBe(true);
+        expect(JSON.stringify(configByModuleId.current)).toBe(JSON.stringify({key: 'value', data: 'xy'}));
         done();
       });
     });
@@ -69,7 +75,8 @@ describe('configManager', function() {
       aurelia.start().then(()=>{
         let configByConfigManager = aurelia.container.get(ConfigManager).configs['test\/resources\/otherTestConfig-config'];
         expect(configByConfigManager instanceof OtherConfig).toBe(true);
-        expect(JSON.stringify(configByConfigManager)).toBe(JSON.stringify({key: 'value', data: 'xy'}));
+        expect(configByConfigManager instanceof BaseConfig).toBe(true);
+        expect(JSON.stringify(configByConfigManager.current)).toBe(JSON.stringify({key: 'value', data: 'xy'}));
         done();
       });
     });
@@ -110,7 +117,8 @@ describe('configManager', function() {
       aurelia.start().then(()=>{
         let configByClass = aurelia.container.get(Config);
         expect(configByClass instanceof Config).toBe(true);
-        expect(JSON.stringify(configByClass)).toBe(JSON.stringify({key: 'value', data: 'xy'}));
+        expect(configByClass instanceof BaseConfig).toBe(true);
+        expect(JSON.stringify(configByClass.current)).toBe(JSON.stringify({key: 'value', data: 'xy'}));
         done();
       });
     });
@@ -119,7 +127,8 @@ describe('configManager', function() {
       aurelia.start().then(()=>{
         let configByConfigManager = aurelia.container.get(ConfigManager).configs['plugin-config'];
         expect(configByConfigManager instanceof Config).toBe(true);
-        expect(JSON.stringify(configByConfigManager)).toBe(JSON.stringify({key: 'value', data: 'xy'}));
+        expect(configByConfigManager instanceof BaseConfig).toBe(true);
+        expect(JSON.stringify(configByConfigManager.current)).toBe(JSON.stringify({key: 'value', data: 'xy'}));
         done();
       });
     });
@@ -136,7 +145,8 @@ describe('configManager', function() {
       aurelia.start().then(()=>{
         let configByConfigManager = aurelia.container.get(ConfigManager).configs['test/resources/otherTestConfig-config'];
         expect(configByConfigManager instanceof OtherConfig).toBe(true);
-        expect(JSON.stringify(configByConfigManager)).toBe(JSON.stringify({key: 'value', data: 'xy'}));
+        expect(configByConfigManager instanceof BaseConfig).toBe(true);
+        expect(JSON.stringify(configByConfigManager.current)).toBe(JSON.stringify({key: 'value', data: 'xy'}));
         done();
       });
     });
