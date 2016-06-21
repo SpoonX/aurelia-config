@@ -5,22 +5,37 @@ import extend from 'extend';
  */
 export class BaseConfig {
 
+  /**
+   * The defaults of your config
+   * @param {Object}
+   */
   defaults = {};
 
+  /**
+   * The current values of your config
+   * @type {Object}
+   */
   current = {};
 
-  /* reserved properties for defining aliases */
+  /**
+   * The alias of your config. Set automatically during configuration
+   * @type {String}
+   */
   alias = ''
 
-  constructor(incomming = {}) {
-    extendIn(this, 'defaults', incomming);
+  /**
+   * Creates an instance of BaseConfig. Copies defaults into current
+   * @param  {Object} defaultsOverwrite = {} Optionally extends the defaults
+   */
+  constructor(defaultsOverwrite = {}) {
+    extendIn(this, 'defaults', defaultsOverwrite);
     this.current = JSON.parse(JSON.stringify(this.defaults));
   }
 
   /**
    * Fetches a value from the current configuration
-   * @param  {string|Array} keys Array and/or dot-separated string key
-   * @return {any}          that The retrived value
+   * @param  {string|Array<keys>} keys (dot-separated) string(s) or array of keys
+   * @return {any}                that The retrived value
    */
   fetch(...keys) {
     return fetchFrom(this.current, ...normalizeKey(...keys));
@@ -28,7 +43,7 @@ export class BaseConfig {
 
   /**
    * Deletes a value from the current configuration
-   * @param {string|Array} keys Array and/or dot-separated string key
+   * @param {string|Array<keys>} keys (dot-separated) string(s) or array of keys
    */
   delete(...keys) {
     delete this.fetch(...keys);
@@ -36,8 +51,8 @@ export class BaseConfig {
 
   /**
    * Sets a value in the current configuration
-   * @param {string|Array} keys  Array and/ar dot-separated string key
-   * @param {any}          value The value to set
+   * @param {string|Array<keys>} keys  (dot-separated) string(s) or array of keys
+   * @param {any}                value The value to set
    */
   set(keys, value) {
     setIn(this.current, keys, value);
@@ -45,8 +60,8 @@ export class BaseConfig {
 
   /**
    * Entends an oject value in the current configuration
-   * @param {string|Array} keys  Array and/ar dot-separated string key
-   * @param {Object}       value The value to set
+   * @param {string|Array<keys>} keys  (dot-separated) string(s) or array of keys
+   * @param {Object}             value The value to set
    */
   extend(keys, value) {
     extendIn(this.current, keys, value);
@@ -54,8 +69,8 @@ export class BaseConfig {
 
   /**
    * Reset the current configuration back to defaults
-   * @param {string|Array} keys  Array and/ar dot-separated string key
-   * @param {Object}       value The value to set
+   * @param {string|Array<keys>} keys  (dot-separated) string(s) or array of keys
+   * @param {Object}             value The value to set
    */
   reset(keys = []) {
     setIn(this, ['current', ...keys], JSON.parse(JSON.stringify(fetchFrom(this, ['defaults', ...keys]))));
@@ -64,9 +79,9 @@ export class BaseConfig {
 
 /**
  * Used to normalize keys of mixed array and dot-separated string to a single string array
- * @param  {string|Array} key    Array and/or dot-separated string key
- * @param  {Array}       ...rest Rest of the arguments
- * @return {Array}         that  The key normalized to an array of strings
+ * @param  {string|Array<keys>} keys    (dot-separated) string(s) or array of keys
+ * @param  {Array}              ...rest Rest of the arguments
+ * @return {Array}              that    The key normalized to an array of strings
  */
 export function normalizeKey(key, ...rest) {
   let normalized = Array.isArray(key) ? normalizeKey(...key) : key.split('.');
@@ -77,10 +92,10 @@ export function normalizeKey(key, ...rest) {
 
 /**
  * Fetches value from (nested) object with a normalized key
- * @param  {Object}       data    The data to fetch data from
- * @param  {string|Array} key     An array of strings as keys
- * @param  {Array}        ...rest Rest of the arguments
- * @return {any}          that    The retrieved value from the data
+ * @param  {Object}             data    The data to fetch data from
+ * @param  {string|Array<keys>} keys    (dot-separated) string(s) or array of keys
+ * @param  {Array}              ...rest Rest of the arguments
+ * @return {any}                that    The retrieved value from the data
  */
 export function fetchFrom(data, key, ...rest) {
   return rest.length === 0 ? data[key] : fetchFrom(data[key], ...rest);
@@ -88,9 +103,9 @@ export function fetchFrom(data, key, ...rest) {
 
 /**
  * Sets a value in data object
- * @param  {Object}      data  The data to set value in
- * @param {string|Array} keys  Array and/ar dot-separated string key
- * @param {any}          value The value to set
+ * @param {Object}             data  The data to set value in
+ * @param {string|Array<keys>} keys  (dot-separated) string(s) or array of keys
+ * @param {any}                value The value to set
  */
 export function setIn(data, keys, value) {
   let normalizedKey = normalizeKey(keys);
@@ -100,9 +115,9 @@ export function setIn(data, keys, value) {
 
 /**
  * Entends an oject value in data object
- * @param {Object}       data  The data to extend
- * @param {string|Array} keys  Array and/ar dot-separated string key
- * @param {Object}       value The value to set
+ * @param {Object}             data  The data to extend
+ * @param {string|Array<keys>} keys  (dot-separated) string(s) or array of keys
+ * @param {Object}             value The value to set
  */
 export function extendIn(data, keys, value) {
   let normalizedKey = normalizeKey(keys);

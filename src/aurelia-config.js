@@ -1,21 +1,18 @@
 import {ConfigManager} from './configManager';
 import {GlobalConfig} from './globalConfig';
-import {BaseConfig, normalizeKey} from './baseConfig';
+import {BaseConfig, normalizeKey, fetchFrom, setIn, extendIn} from './baseConfig';
 
 /**
- * configure aurelia-config
- * @param  {Aurelia}         aurelia           The aurelia instance
- * @param  {function|Object} configOrConfigure The configuration object or function
+ * Configure aurelia-config
+ * @param  {Aurelia} aurelia The aurelia instance
+ * @param  {Object}  config  The configuration object
  * @return {Promise}
  */
-function configure(aurelia, configOrConfigure) {
+function configure(aurelia, config) {
   let configManager = aurelia.container.get(ConfigManager);
   configManager.aurelia = aurelia;
 
-  if (typeof configOrConfigure === 'function') {
-    return configOrConfigure(configManager);
-  }
-  return configManager.configure(configOrConfigure);
+  return configManager.configure(config);
 }
 
 export {
@@ -23,5 +20,8 @@ export {
   configure,
   GlobalConfig,
   BaseConfig,
-  normalizeKey
+  normalizeKey,
+  fetchFrom,
+  setIn,
+  extendIn
 };

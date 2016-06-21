@@ -1,4 +1,4 @@
-import {configure, ConfigManager, GlobalConfig} from '../src/aurelia-config';
+import {configure, ConfigManager, BaseConfig, GlobalConfig} from '../src/aurelia-config';
 import {Aurelia} from 'aurelia-framework';
 import {DefaultLoader} from 'aurelia-loader-default';
 import {Container} from 'aurelia-dependency-injection';
@@ -11,23 +11,32 @@ describe('aurelia-config', function() {
     it('Should export ConfigManager', function() {
       expect(ConfigManager).toBeDefined();
     });
+    it('Should export BaseConfig', function() {
+      expect(BaseConfig).toBeDefined();
+    });
     it('Should export GlobalConfig', function() {
       expect(GlobalConfig).toBeDefined();
     });
   });
 
   describe('configure()', function() {
-    it('Should configure with a function', function() {
-      configure(getAurelia(), function(config) {
-        expect(config instanceof ConfigManager).toBe(true);
-      });
+    it('Should configure with an object', function() {
+      let config = configure(getAurelia(), {});
+      expect(config instanceof Promise).toBe(true);
     });
   });
 
   describe('configure()', function() {
-    it('Should configure with an object', function() {
-      let config = configure(getAurelia(), {});
-      expect(config instanceof ConfigManager).toBe(true);
+    it('Should fail to configure plugins with same ids', function(done) {
+      configure(getAurelia(), {
+        plugins: [
+          {moduleId: 'test/resources/testConfig', alias: 'plugin-config', config: {data:'xy'}},
+          {moduleId: 'test/resources/otherTestConfig', className: 'OtherConfig', alias: 'plugin-config', config: {data:'xy'}}
+        ]
+      }).catch(e => {
+        expect(e instanceof Error).toBe(true);
+        done();
+      });
     });
   });
 

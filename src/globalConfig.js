@@ -3,6 +3,4 @@ import {BaseConfig} from './baseConfig';
 /**
  * GlobalConfig class
  */
-export class GlobalConfig extends BaseConfig {
-  aliases = []
-}
+export class GlobalConfig extends BaseConfig {}
