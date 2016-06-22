@@ -24,33 +24,17 @@ describe('aurelia-config', function() {
       let config = configure(getAurelia(), {});
       expect(config instanceof Promise).toBe(true);
     });
-  });
 
-  describe('configure()', function() {
-    it('Should fail to configure plugins with same ids', function(done) {
+    it('Should fail to configure plugins without alias', function(done) {
       configure(getAurelia(), {
         plugins: [
-          {moduleId: 'test/resources/testConfig', alias: 'plugin-config', config: {data:'xy'}},
-          {moduleId: 'test/resources/otherTestConfig', className: 'OtherConfig', alias: 'plugin-config', config: {data:'xy'}}
+          {moduleId: 'test/resources/testConfigs', className: 'FaultyConfig', config: {}}
         ]
+      }).then(() => {
+        expect('failed').toBe(true);
       }).catch(e => {
         expect(e instanceof Error).toBe(true);
-        done();
-      });
-    });
-  });
-
-  describe('configure()', function() {
-    it('Should fail to configure plugins with same ids', function(done) {
-      configure(getAurelia(), {
-        plugins: [
-          {moduleId: 'test/resources/testConfig', alias: 'plugin-config', config: {data:'xy'}},
-          {moduleId: 'test/resources/otherTestConfig', className: 'OtherConfig', alias: 'plugin-config', config: {data:'xy'}}
-        ]
-      }).catch(e => {
-        expect(e instanceof Error).toBe(true);
-        done();
-      });
+      }).then(done);
     });
   });
 });

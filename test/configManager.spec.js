@@ -2,27 +2,28 @@ import {ConfigManager, configure, GlobalConfig, BaseConfig} from '../src/aurelia
 import {Aurelia} from 'aurelia-framework';
 import {DefaultLoader} from 'aurelia-loader-default';
 import {Container} from 'aurelia-dependency-injection';
-import {Config} from './resources/testConfig';
-import {OtherConfig} from './resources/otherTestConfig';
+import {Config, OtherConfig} from './resources/testConfigs';
 
 describe('configManager', function() {
-  describe('configure with globalRegister', function() {
+  describe('.add (registerAlias=true)', function() {
     let aurelia;
 
     beforeEach(() => {
       aurelia = getAurelia();
       configure(aurelia, {
         plugins: [
-          {moduleId: 'test/resources/testConfig', alias: 'plugin-config', config: {data:'xy'}},
-          {moduleId: 'test/resources/otherTestConfig', className: 'OtherConfig', config: {data:'xy'}},
+          {moduleId: 'test/resources/testConfigs', config: {data:'xy'}},
+          {moduleId: 'test/resources/testConfigs', className: 'OtherConfig', config: {data:'xy'}},
           {moduleId: 'global-config', config: {data:'xy'}}
-        ]
+        ],
+        globalConfig: true
       });
     });
 
     it('Should have registered and merged GlobalConfig with global alias', function(done) {
       aurelia.start().then(()=>{
         let configGlobal = aurelia.container.get('global-config');
+
         expect(configGlobal instanceof GlobalConfig).toBe(true);
         expect(configGlobal instanceof BaseConfig).toBe(true);
         expect(JSON.stringify(configGlobal.current)).toBe(JSON.stringify({data: 'xy'}));
@@ -61,9 +62,9 @@ describe('configManager', function() {
       });
     });
 
-    it('Should have registered and merged Config with global default alias', function(done) {
+    it('Should have registered and merged Config with global custom class name', function(done) {
       aurelia.start().then(()=>{
-        let configByModuleId = aurelia.container.get('test\/resources\/otherTestConfig-config');
+        let configByModuleId = aurelia.container.get('other-config');
         expect(configByModuleId instanceof OtherConfig).toBe(true);
         expect(configByModuleId instanceof BaseConfig).toBe(true);
         expect(JSON.stringify(configByModuleId.current)).toBe(JSON.stringify({key: 'value', data: 'xy'}));
@@ -71,9 +72,9 @@ describe('configManager', function() {
       });
     });
 
-    it('Should have registered and merged Config with ConfigManager and default alias', function(done) {
+    it('Should have registered and merged Config with ConfigManager and custom class name', function(done) {
       aurelia.start().then(()=>{
-        let configByConfigManager = aurelia.container.get(ConfigManager).configs['test\/resources\/otherTestConfig-config'];
+        let configByConfigManager = aurelia.container.get(ConfigManager).configs['other-config'];
         expect(configByConfigManager instanceof OtherConfig).toBe(true);
         expect(configByConfigManager instanceof BaseConfig).toBe(true);
         expect(JSON.stringify(configByConfigManager.current)).toBe(JSON.stringify({key: 'value', data: 'xy'}));
@@ -82,15 +83,15 @@ describe('configManager', function() {
     });
   });
 
-  describe('configure without registerAlias', function() {
+  describe('.add (registerAlias=false)', function() {
     let aurelia;
 
     beforeEach(() => {
       aurelia = getAurelia();
       configure(aurelia, {
         plugins: [
-          {moduleId: 'test/resources/testConfig', alias: 'plugin-config', config: {data:'xy'}},
-          {moduleId: 'test/resources/otherTestConfig', className: 'OtherConfig', config: {data:'xy'}},
+          {moduleId: 'test/resources/testConfigs', config: {data:'xy'}},
+          {moduleId: 'test/resources/testConfigs', className: 'OtherConfig', config: {data:'xy'}},
           {moduleId: 'global-config', config: {data:'xy'}}
         ],
         registerAlias: false
@@ -133,17 +134,17 @@ describe('configManager', function() {
       });
     });
 
-    it('Should not have registered and merged Config with global default alias', function(done) {
+    it('Should not have registered and merged Config with custom class name', function(done) {
       aurelia.start().then(()=>{
-        let configByModuleId = aurelia.container.get('test\/resources\/otherTestConfig-config');
+        let configByModuleId = aurelia.container.get('other-config');
         expect(configByModuleId instanceof OtherConfig).toBe(false);
         done();
       });
     });
 
-    it('Should have registered and merged Config with ConfigManager and default alias', function(done) {
+    it('Should have registered and merged Config with ConfigManager and custom class name', function(done) {
       aurelia.start().then(()=>{
-        let configByConfigManager = aurelia.container.get(ConfigManager).configs['test/resources/otherTestConfig-config'];
+        let configByConfigManager = aurelia.container.get(ConfigManager).configs['other-config'];
         expect(configByConfigManager instanceof OtherConfig).toBe(true);
         expect(configByConfigManager instanceof BaseConfig).toBe(true);
         expect(JSON.stringify(configByConfigManager.current)).toBe(JSON.stringify({key: 'value', data: 'xy'}));

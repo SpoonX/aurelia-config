@@ -18,10 +18,10 @@ export class BaseConfig {
   current = {};
 
   /**
-   * The alias of your config. Set automatically during configuration
+   * Derived classes must set a unique alias
    * @type {String}
    */
-  alias = ''
+  alias
 
   /**
    * Creates an instance of BaseConfig. Copies defaults into current
