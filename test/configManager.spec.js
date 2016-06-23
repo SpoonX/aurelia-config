@@ -1,4 +1,7 @@
-import {ConfigManager, configure, GlobalConfig, BaseConfig} from '../src/aurelia-config';
+import {configure} from '../src/aurelia-config';
+import {ConfigManager} from '../src/configManager';
+import {BaseConfig} from '../src/baseConfig';
+import {GlobalConfig} from '../src/globalConfig';
 import {Aurelia} from 'aurelia-framework';
 import {DefaultLoader} from 'aurelia-loader-default';
 import {Container} from 'aurelia-dependency-injection';
@@ -8,16 +11,17 @@ describe('configManager', function() {
   describe('.add (registerAlias=true)', function() {
     let aurelia;
 
-    beforeEach(() => {
+    beforeEach(done => {
       aurelia = getAurelia();
       configure(aurelia, {
         plugins: [
           {moduleId: 'test/resources/testConfigs', config: {data:'xy'}},
-          {moduleId: 'test/resources/testConfigs', className: 'OtherConfig', config: {data:'xy'}},
-          {moduleId: 'global-config', config: {data:'xy'}}
+          {moduleId: 'test/resources/testConfigs', className: 'OtherConfig', config: {data:'xy'}}
         ],
-        globalConfig: true
-      });
+        configs: [
+          {key: GlobalConfig, config: {data:'xy'}}
+        ]
+      }).then(done);
     });
 
     it('Should have registered and merged GlobalConfig with global alias', function(done) {
@@ -91,8 +95,10 @@ describe('configManager', function() {
       configure(aurelia, {
         plugins: [
           {moduleId: 'test/resources/testConfigs', config: {data:'xy'}},
-          {moduleId: 'test/resources/testConfigs', className: 'OtherConfig', config: {data:'xy'}},
-          {moduleId: 'global-config', config: {data:'xy'}}
+          {moduleId: 'test/resources/testConfigs', className: 'OtherConfig', config: {data:'xy'}}
+        ],
+        configs: [
+          {key: GlobalConfig, config: {data:'xy'}}
         ],
         registerAlias: false
       });

@@ -1,28 +1,22 @@
-import {configure, ConfigManager, BaseConfig, GlobalConfig} from '../src/aurelia-config';
+import {configure} from '../src/aurelia-config';
+import {ConfigManager} from '../src/configManager';
 import {Aurelia} from 'aurelia-framework';
 import {DefaultLoader} from 'aurelia-loader-default';
 import {Container} from 'aurelia-dependency-injection';
 
 describe('aurelia-config', function() {
-  describe('export', function() {
-    it('Should export configure', function() {
-      expect(configure).toBeDefined();
-    });
-    it('Should export ConfigManager', function() {
-      expect(ConfigManager).toBeDefined();
-    });
-    it('Should export BaseConfig', function() {
-      expect(BaseConfig).toBeDefined();
-    });
-    it('Should export GlobalConfig', function() {
-      expect(GlobalConfig).toBeDefined();
-    });
-  });
-
   describe('configure()', function() {
     it('Should configure with an object', function() {
-      let config = configure(getAurelia(), {});
-      expect(config instanceof Promise).toBe(true);
+      let result = configure(getAurelia(), {});
+      expect(result instanceof Promise).toBe(true);
+    });
+
+    it('Should configure with a fucntion', function(done) {
+      let result = configure(getAurelia(), config => {
+        expect(config instanceof ConfigManager).toBe(true);
+        done();
+      });
+      expect(result instanceof Promise).toBe(true);
     });
 
     it('Should fail to configure plugins without alias', function(done) {
