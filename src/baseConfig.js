@@ -73,19 +73,28 @@ export class BaseConfig {
    * @param {Object}             value The value to set
    */
   reset(keys = []) {
+    /*
+     * prepend 'current' resp 'default' to the key to work on 'this' itself
+     */
     setIn(this, ['current', ...keys], JSON.parse(JSON.stringify(fetchFrom(this, ['defaults', ...keys]))));
   }
 }
 
 /**
- * Used to normalize keys of mixed array and dot-separated string to a single string array
+ * Used to normalize keys of mixed array and dot-separated string to a single array of undotted strings
  * @param  {string|Array<keys>} keys    (dot-separated) string(s) or array of keys
  * @param  {Array}              ...rest Rest of the arguments
  * @return {Array}              that    The key normalized to an array of strings
  */
 export function normalizeKey(key, ...rest) {
+  /*
+   * First, we split the arguments in key and rest
+   * then, if key is an array, we need to normalize it as well
+   * else it can be split into an array directly
+   * if the rest was empty, we're done
+   * if not we concat our normalized key with the normalized rest
+   */
   let normalized = Array.isArray(key) ? normalizeKey(...key) : key.split('.');
-
   return rest.length === 0 ? normalized : normalized.concat(normalizeKey(...rest));
 }
 
@@ -94,10 +103,19 @@ export function normalizeKey(key, ...rest) {
  * Fetches value from (nested) object with a normalized key
  * @param  {Object}             data    The data to fetch data from
  * @param  {string|Array<keys>} keys    (dot-separated) string(s) or array of keys
- * @param  {Array}              ...rest Rest of the arguments
+ * @param  {Array<key>}              ...rest Rest of the arguments
  * @return {any}                that    The retrieved value from the data
  */
 export function fetchFrom(data, key, ...rest) {
+  /*
+   * data is the POJO of the current branch
+   * [key,...rest] is the current normalized key,
+   * thus key is the first key as string and ...rest the remainder of the key
+   * if rest is empty, then data[key] is the data we want to fetch
+   * else, we go down onw set on the branch (data[key]) and repeat with ...rest,
+   * which will make the new key the first entry of ...rest
+   * and the new rest the remainder of ...rest minus the key
+   */
   return rest.length === 0 ? data[key] : fetchFrom(data[key], ...rest);
 }
 
@@ -108,9 +126,16 @@ export function fetchFrom(data, key, ...rest) {
  * @param {any}                value The value to set
  */
 export function setIn(data, keys, value) {
+  /*
+   * since fetchFrom yields the value, but we want the reference to it,
+   * we first reduce the keys from right (pop) and store it in key
+   * now, fetchFrom yields the reference to be object to be set
+   * unless, was a key on the root level and thus normalizedKey was empty now
+   * in that case, we can just set data[key]
+   */
   let normalizedKey = normalizeKey(keys);
   let key = normalizedKey.pop();
-  (fetchFrom(data, ...normalizedKey) || data)[key] = value;
+  (fetchFrom(data, ...normalizedKey) || data) [key] = value;
 }
 
 /**
@@ -120,6 +145,9 @@ export function setIn(data, keys, value) {
  * @param {Object}             value The value to set
  */
 export function extendIn(data, keys, value) {
+  /*
+   * same as setIn. just that, if ref[key] was empty, it needs to be created
+   */
   let normalizedKey = normalizeKey(keys);
   let key = normalizedKey.pop();
   let ref = fetchFrom(data, ...normalizedKey) || data;
