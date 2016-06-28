@@ -9,26 +9,28 @@ export class BaseConfig {
    * The defaults of your config
    * @param {Object}
    */
-  defaults = {};
+  defaults;
 
   /**
    * The current values of your config
-   * @type {Object}
+   * @param {Object}
    */
-  current = {};
+  current;
 
   /**
-   * Derived classes must set a unique alias
-   * @type {String}
+   * Derived classes should set an alternative alias
+   * @param {String}
    */
   alias
 
   /**
    * Creates an instance of BaseConfig. Copies defaults into current
-   * @param  {Object} defaultsOverwrite = {} Optionally extends the defaults
+   * @param  {Object} defaults Set the defaults. Required!
    */
-  constructor(defaultsOverwrite = {}) {
-    extendIn(this, 'defaults', defaultsOverwrite);
+  constructor(defaults) {
+    if (!defaults) throw new Error('Must provide defaults to BaseConfig constructor');
+
+    this.defaults = defaults;
     this.current = JSON.parse(JSON.stringify(this.defaults));
   }
 

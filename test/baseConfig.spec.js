@@ -1,4 +1,3 @@
-import {Container} from 'aurelia-dependency-injection';
 import {BaseConfig, normalizeKey, fetchFrom} from '../src/baseConfig';
 
 describe('normalizeKey', function() {
@@ -92,6 +91,12 @@ describe('fetchFrom', function() {
 
 describe('BaseConfig', function() {
   describe('constructor', function() {
+    it('Should throw when called without default', function() {
+      let fail = () => new BaseConfig();
+
+      expect(fail).toThrow();
+    });
+
     it('Should extend defaults and set current', function() {
       let baseConfig = new BaseConfig({'foo': 'bar'});
 
@@ -102,22 +107,19 @@ describe('BaseConfig', function() {
 
   describe('fetch', function() {
     it('Should get string data from simple object', function() {
-      let baseConfig = (new Container).get(BaseConfig);
-      baseConfig.current = {'foo': 'bar'};
+      let baseConfig = new BaseConfig({'foo': 'bar'});
 
       expect(baseConfig.fetch('foo')).toBe('bar');
     });
 
     it('Should get object data from simple object', function() {
-      let baseConfig = (new Container).get(BaseConfig);
-      baseConfig.current = {'foo': {'bar':'baz'}};
+      let baseConfig = new BaseConfig({'foo': {'bar':'baz'}});
 
       expect(JSON.stringify(baseConfig.fetch('foo'))).toBe(JSON.stringify({'bar': 'baz'}));
     });
 
     it('Should get string data from nested object', function() {
-      let baseConfig = (new Container).get(BaseConfig);
-      baseConfig.current = {'foo': {'bar':'baz'}};
+      let baseConfig = new BaseConfig({'foo': {'bar':'baz'}});
 
       expect(baseConfig.fetch('foo.bar')).toBe('baz');
     });
@@ -125,22 +127,19 @@ describe('BaseConfig', function() {
 
   describe('delete', function() {
     it('Should delete string data from simple object', function() {
-      let baseConfig = (new Container).get(BaseConfig);
-      baseConfig.current = {'foo': 'bar'};
+      let baseConfig = new BaseConfig({'foo': 'bar'});
 
       expect(baseConfig.delete('foo')).toBeUndefined();
     });
 
     it('Should delete object data from simple object', function() {
-      let baseConfig = (new Container).get(BaseConfig);
-      baseConfig.current = {'foo': {'bar':'baz'}};
+      let baseConfig = new BaseConfig({'foo': {'bar':'baz'}});
 
       expect(baseConfig.delete('foo')).toBeUndefined();
     });
 
     it('Should delete string data from nested object', function() {
-      let baseConfig = (new Container).get(BaseConfig);
-      baseConfig.current = {'foo': {'bar':'baz'}};
+      let baseConfig = new BaseConfig({'foo': {'bar':'baz'}});
 
       expect(baseConfig.delete('foo.bar')).toBeUndefined();
       expect(baseConfig.fetch('foo')).toBeDefined();
@@ -149,30 +148,28 @@ describe('BaseConfig', function() {
 
   describe('set', function() {
     it('Should add string data in root object', function() {
-      let baseConfig = (new Container).get(BaseConfig);
+      let baseConfig = new BaseConfig({});
       baseConfig.set('foo', 'bar');
 
       expect(baseConfig.fetch('foo')).toBe('bar');
     });
 
     it('Should add object data in root object', function() {
-      let baseConfig = (new Container).get(BaseConfig);
+      let baseConfig = new BaseConfig({});
       baseConfig.set('foo', {'bar':'baz'});
 
       expect(baseConfig.fetch('foo.bar')).toBe('baz');
     });
 
     it('Should overwrite data in root object', function() {
-      let baseConfig = (new Container).get(BaseConfig);
-      baseConfig.current = {'foo': {'bar':'baz'}};
+      let baseConfig = new BaseConfig({'foo': {'bar':'baz'}});
       baseConfig.set('foo', 'bar');
 
       expect(baseConfig.fetch('foo')).toBe('bar');
     });
 
     it('Should overwrite data', function() {
-      let baseConfig = (new Container).get(BaseConfig);
-      baseConfig.current = {'foo': {'bar':'baz'}};
+      let baseConfig = new BaseConfig({'foo': {'bar':'baz'}});
       baseConfig.set('foo.bar', 'bazzing');
 
       expect(baseConfig.fetch('foo.bar')).toBe('bazzing');
@@ -181,23 +178,20 @@ describe('BaseConfig', function() {
 
   describe('extend', function() {
     it('Should add object data in root object', function() {
-      let baseConfig = (new Container).get(BaseConfig);
-      baseConfig.extend('foo', {'bar':'baz'});
+      let baseConfig = new BaseConfig({'foo': {'bar':'baz'}});
 
       expect(baseConfig.fetch('foo.bar')).toBe('baz');
     });
 
     it('Should overwrite data in root object', function() {
-      let baseConfig = (new Container).get(BaseConfig);
-      baseConfig.current = {'foo': {'bar':'baz'}};
+      let baseConfig = new BaseConfig({'foo': {'bar':'baz'}});
       baseConfig.extend('foo', {'bar':'bazzing'});
 
       expect(baseConfig.fetch('foo.bar')).toBe('bazzing');
     });
 
     it('Should add object data', function() {
-      let baseConfig = (new Container).get(BaseConfig);
-      baseConfig.current = {'foo': {'bar':'baz'}};
+      let baseConfig = new BaseConfig({'foo': {'bar':'baz'}});
       baseConfig.extend('foo', {'barring': 'bazzing'});
 
       expect(baseConfig.fetch('foo.bar')).toBe('baz');
@@ -205,16 +199,14 @@ describe('BaseConfig', function() {
     });
 
     it('Should overwrite object data in nested', function() {
-      let baseConfig = (new Container).get(BaseConfig);
-      baseConfig.current = {'foo': {'bar': {'baz': 'bazzing'}}};
+      let baseConfig = new BaseConfig({'foo': {'bar': {'baz': 'bazzing'}}});
       baseConfig.extend('foo.bar', {'baz': 'barring'});
 
       expect(baseConfig.fetch('foo.bar.baz')).toBe('barring');
     });
 
     it('Should add object data in nested', function() {
-      let baseConfig = (new Container).get(BaseConfig);
-      baseConfig.current = {'foo': {'bar': {'baz': 'bamm'}}};
+      let baseConfig = new BaseConfig({'foo': {'bar': {'baz': 'bamm'}}});
       baseConfig.extend('foo.bar', {'barring': 'bazzing'});
 
       expect(baseConfig.fetch('foo.bar.baz')).toBe('bamm');
@@ -222,19 +214,19 @@ describe('BaseConfig', function() {
     });
   });
 
+
   describe('reset', function() {
     it('Should reset current to defaults', function() {
-      let baseConfig = (new Container).get(BaseConfig);
-      baseConfig.defaults = {'foo': 'bar'};
+      let baseConfig = new BaseConfig({'foo': 'bar'});
+      baseConfig.current = {'baz': 'bamm'};
       baseConfig.reset();
 
       expect(baseConfig.fetch('foo')).toBe('bar');
     });
 
     it('Should reset subtree of current to defaults', function() {
-      let baseConfig = (new Container).get(BaseConfig);
-      baseConfig.defaults = {'foo': {'bar': 'baz'}};
-      baseConfig.surrent = {'foo': {'bar': 'bazzing'}};
+      let baseConfig = new BaseConfig({'foo': {'bar':'baz'}});
+      baseConfig.current = {'foo': {'bar': 'bazzing'}};
       baseConfig.reset();
 
       expect(baseConfig.fetch('foo.bar')).toBe('baz');

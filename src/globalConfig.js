@@ -5,4 +5,7 @@ import {BaseConfig} from './baseConfig';
  */
 export class GlobalConfig extends BaseConfig {
   alias = 'global-config'
+  constructor(defaults = {}) {
+    super(defaults);
+  }
 }

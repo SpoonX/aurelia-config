@@ -35,6 +35,7 @@ export function configure(aurelia) {
     .developmentLogging()
     .plugin('aurelia-config', {
       plugins: [
+        // Add Configs from plugins
         // {
         // module:    moduleId,     // The plugin moduleId
         // config:    configObject, // The config object you want to merge into
@@ -44,13 +45,28 @@ export function configure(aurelia) {
         //                             and the container, if applicable
         // className: 'ClassName'   // The class name (default: 'Config') of the
         //                             config object that will be imported from
-        //                             the plugin 
+        //                             the plugin
         // }
         {moduleId: 'aurelia-api', config: {key:'xy'}, className: 'Config'},
         {moduleId: 'aurelia-authorization', alias: 'authorization-config', config: {data:'xy'}},
-        {moduleId: 'global-config', config: {title:'xy'}} // You also can the build-in config named 'global-config'
       ],
-      registerAlias: true   // Allows injection by alias (default: true)
+      configs: [
+        // Add new Configs by Object
+        // {
+        // key:     'an-alias',   // The alias/key (default: ${moduleId}-config)
+        //                             (used for registration in the ConfigManager
+        //                             and the container, if applicable
+        // config:    configObject, // The config object you want to merge into
+        //                             the plugins config
+        // }
+        {key: 'adhoc-config'}
+      ],
+      // Add entries to the pre-defined 'global-config'
+      // globalConfig: configObject, // The config object you want to merge into
+      //                                the plugins config
+      globalConfig: {data:'xy'},
+      // Allows injection by alias (default: true)
+      registerAlias: true   
     })
     /* Your other plugins */
 );
@@ -81,7 +97,7 @@ Alternatively, you can inject the ConfigManager from aurelia-config and get the 
 ```js
 import {ConfigManager} from 'aurelia-config';
 
-@inject(Config)
+@inject(ConfigManager)
 export class Foo {
   constructor(configManager) {
     this.config = configManager.configs['authorization-config'];
@@ -109,7 +125,7 @@ There also is a global config. Use it like any other Config. It's alias is 'glob
 @inject('global-config')
 export class Foo {
   constructor(config) {
-    this.config = config;
+    this.globalConfig = config;
   }
 }
 ```

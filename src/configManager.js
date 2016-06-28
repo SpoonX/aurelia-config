@@ -10,7 +10,7 @@ import {GlobalConfig} from './globalConfig';
 export class ConfigManager {
   /**
    * POJO map of the registered configs
-   * @type {Object}
+   * @param {{key, configObject}}
    */
   configs = {};
 
@@ -27,117 +27,128 @@ export class ConfigManager {
   loader;
 
   /**
-  * Creates an instance of BaseConfig. Copies defaults into current
-   * @param  {Container} container The container for the Configs
-   * @param  {Loader}    loader    The loader for the Configs
-   */
+  * Creates an instance of the ConfigManager
+  * @param {Container} container The container for the Configs
+  * @param {Loader} loader The loader for the Configs
+  */
   constructor(container, loader) {
     this.container = container;
-    this.loader = loader;
+    this.loader    = loader;
   }
 
   /**
-   * Configure with a list of plugins and configs
-   * @param  {{plugins, configs, registerAlias}} plugins: [{moduleId, config, className}], configs: {key, config}, registerAlias: boolean
-   * @return {Promise<>}
+   * Has alias registered
+   * @param  {string} alias The requested alias
+   * @return {boolean} that
    */
-  configure({plugins, configs, registerAlias}) {
-    let promise;
-
-    // register and merge plugin Configs
-    let moduleLoaders = [];
-    (plugins || []).forEach(plugin => {
-      moduleLoaders.push(this.load(plugin.moduleId, registerAlias, plugin.config, plugin.className));
-    });
-    promise = Promise.all(moduleLoaders);
-
-    // register config objects
-    promise.then(()=>{
-      (configs || []).forEach(configObject => {
-        this.add(configObject.key, configObject.config, registerAlias);
-      });
-
-      // add globalConfig if it wasn't listed in configs
-      if (!this.container.hasResolver(GlobalConfig)) {
-        this.add(GlobalConfig);
-      }
-    });
-
-    return promise;
+  has(alias) {
+    return !!this.configs[alias];
   }
 
   /**
-   * Load a plugin by moduleId and merge config
-   * @param  {{moduleId, registerAlias, config, className}} moduleId: string, registerAlias: boolean, config: configObject, className: string
-   * @return {Promise<>}
+   * Resolves an alias or container key or instance to Config instance
+   * @param {function|string|BaseConfig} aliasOrKeyOrInstance The target alias or container key or a BaseConfig instance
+   * @return {BaseConfig} that
    */
-  load(moduleId, registerAlias = true, config = {}, className = 'Config') {
-    return this.loader.loadModule(moduleId).then(loadedModule => {
-      if (!className in loadedModule) {
-        throw new Error(`${className} not found for ${moduleId}`);
-      }
+  get(aliasOrKeyOrInstance) {
+    // is registered Config
+    if (typeof aliasOrKeyOrInstance === 'string' && !!this.configs[aliasOrKeyOrInstance]) {
+      return this.configs[aliasOrKeyOrInstance];
+    }
 
-      this.add(loadedModule[className], config, registerAlias);
-    });
+    // is a BaseConfig instance
+    if (isConfig(aliasOrKeyOrInstance)) {
+      return aliasOrKeyOrInstance;
+    }
+
+    // is registered string key from container or resolver
+    if (typeof aliasOrKeyOrInstance !== 'string' || this.container.hasResolver(aliasOrKeyOrInstance)) {
+      return this.container.get(aliasOrKeyOrInstance);
+    }
   }
 
+
   /**
-   * configure a Config class
-   * @param  {function|string|BaseConfig} keyOrInstance The target DI key or an instance of BaseConfig
-   * @param  {Object}                    config        The configuration object
-   * @param  {boolen}                    registerAlias Register with container (true)
-   * @return {ConfigManager}                           itself
+   * Add a Config from a BaseConfig or Object
+   * @param  {string} alias The unique alias to register under
+   * @param  {BaseConfig|Object} config The BaseConfig instance to add
+   * @param  {boolean} registerAlias Register with container (true)
+   * @return {ConfigManager} itself
    * @chainable
    */
-  add(keyOrInstance, configObject = {}, registerAlias = true) {
-    let config = keyOrInstance instanceof BaseConfig
-                ? keyOrInstance
-                : this.container.get(keyOrInstance);
-
+  addInstance(alias, configObject = {}, registerAlias = true) {
+    let config = configObject;
     // get id
-    let id = assertId(config.alias, this.configs, 'unique');
+    let id = assertId('unique', alias, this.configs);
 
-    // set default and extend
-    config.reset();
-    extend(true, config.current, configObject);
+    // in case config isn't a BaseConfig instance, it get's wrapped into one
+    if (!isConfig(config)) {
+      config = new BaseConfig(configObject);
+    }
+    if (registerAlias) {
+      this.container.registerInstance(id, config);
+    }
 
     // register config
     this.configs[id] = config;
-    if (registerAlias) {
-      if (keyOrInstance instanceof BaseConfig) {
-        this.container.registerInstance(keyOrInstance, id);
-      } else {
-        this.container.registerAlias(keyOrInstance, id);
+
+    return this;
+  }
+
+  /**
+   * Add a Config by key from the container
+   * @param  {function|string} key The container key
+   * @param  {Object} configObject The configuration object
+   * @param  {string} alias The aiias to register under if none is set in config.alias
+   * @param  {boolean} registerAlias Register with container (true)
+   * @return {ConfigManager} itself
+   * @chainable
+   */
+  addFromContainer(key, configObject = {}, alias, registerAlias = true) {
+    let config = this.get(key);
+    // get id
+    let id = assertId('unique', config.alias || alias, this.configs);
+
+    // extend with configObject or create new BaseConfig with configObject
+    if (isConfig(config)) {
+      extend(true, config.current, configObject);
+      if (registerAlias) {
+        this.container.registerAlias(key, id);
+      }
+    } else {
+      config = new BaseConfig(config);
+      extend(true, config.current, configObject);
+      if (registerAlias) {
+        this.container.registerInstance(id, config);
       }
     }
 
-    LogManager.getLogger('aurelia-config').info(`Registered and configured config '${id}'.`);
+    this.configs[id] = config;
 
     return this;
   }
 
   /**
   * Deep copy a Config into another
-  * @param  {function|string|BaseConfig} targetKeyOrInstance The target DI key or an instance of BaseConfig
-  * @param  {function|string|BaseConfig} sourceKeyOrInstance The source DI key or an instance of BaseConfig
-  * @param  {boolen}                    includeDefaults     Also copy defaults
-  * @return {ConfigManager}                                 itself
+  * @param {function|string|BaseConfig} targetAliasOrKeyOrInstance The target alias, container key or an instance of BaseConfig
+  * @param {function|string|BaseConfig} sourceAliasOrKeyOrInstance The source alias, container key or an instance of BaseConfig
+  * @param  {boolean} includeDefaults Also copy defaults
+  * @return {ConfigManager} itself
   * @chainable
   */
 
-  copy(targetKeyOrInstance, sourceKeyOrInstance, includeDefaults) {
-    let targetConfig = targetKeyOrInstance instanceof BaseConfig
-                    ? targetKeyOrInstance
-                    : this.container.get(targetKeyOrInstance);
-    let sourceConfig = sourceKeyOrInstance instanceof BaseConfig
-                    ? sourceKeyOrInstance
-                    : this.container.get(sourceKeyOrInstance);
+  copy(targetAliasOrKeyOrInstance, sourceAliasOrKeyOrInstance, includeDefaults = false) {
+    let targetConfig = this.get(targetAliasOrKeyOrInstance);
+    let sourceConfig = this.get(sourceAliasOrKeyOrInstance);
 
+    if (!isConfig(targetConfig)) {
+      throw new TypeError('Target must resolve to type BaseClass');
+    }
+    let source = isConfig(sourceConfig) ? sourceConfig : {current: sourceConfig, defaults: sourceConfig};
 
-    // set default and extend
-    targetConfig.current = JSON.parse(JSON.stringify(sourceConfig.current));
+    targetConfig.current = JSON.parse(JSON.stringify(source.current));
     if (includeDefaults) {
-      targetConfig.defaults = JSON.parse(JSON.stringify(sourceConfig.defaults));
+      targetConfig.defaults = JSON.parse(JSON.stringify(source.defaults));
     }
 
     return this;
@@ -145,24 +156,24 @@ export class ConfigManager {
 
   /**
   * Deep extend a Config with another
-  * @param  {function|string|BaseConfig} targetKeyOrInstance The target DI key or an instance of BaseConfig
-  * @param  {function|string|BaseConfig} sourceKeyOrInstance The source DI key or an instance of BaseConfig
-  * @param  {boolen}                    includeDefaults     Also merge defaults
-  * @return {ConfigManager}                                 itself
+  * @param {function|string|BaseConfig} targetKeyOrInstance The target container key or an instance of BaseConfig
+  * @param {function|string|BaseConfig} sourceKeyOrInstance The source container key or an instance of BaseConfig
+  * @param  {boolean} includeDefaults Also merge defaults
+  * @return {ConfigManager} itself
   * @chainable
   */
-  extend(targetKeyOrInstance, sourceKeyOrInstance, includeDefaults) {
-    let targetConfig = targetKeyOrInstance instanceof BaseConfig
-                    ? targetKeyOrInstance
-                    : this.container.get(targetKeyOrInstance);
-    let sourceConfig = sourceKeyOrInstance instanceof BaseConfig
-                    ? sourceKeyOrInstance
-                    : this.container.get(sourceKeyOrInstance);
+  extend(targetAliasOrKeyOrInstance, sourceAliasOrKeyOrInstance, includeDefaults = false) {
+    let targetConfig = this.get(targetAliasOrKeyOrInstance);
+    let sourceConfig = this.get(sourceAliasOrKeyOrInstance);
 
-    // set default and extend
-    extend(true, targetConfig.current, sourceConfig.current);
+    if (!isConfig(targetConfig)) {
+      throw new TypeError('Target must resolve to type BaseClass');
+    }
+    let source = isConfig(sourceConfig) ? sourceConfig : {current: sourceConfig, defaults: sourceConfig};
+
+    extend(true, targetConfig.current, source.current);
     if (includeDefaults) {
-      extend(true, targetConfig.defaults, sourceConfig.defaults);
+      extend(true, targetConfig.defaults, source.defaults);
     }
 
     return this;
@@ -170,18 +181,16 @@ export class ConfigManager {
 
   /**
   * Remove a Config from the ConfigManager
-  * @param  {function|string|BaseConfig} keyOrInstance The target DI key or an instance of BaseConfig
-  * @param  {boolen}                    removeAlias   Also remove DI alias (true)
-  * @return {ConfigManager}                           itself
+  * @param  {function|string|BaseConfig} aliasOrKeyOrInstance The target alias or container key or an instance of BaseConfig
+  * @param  {boolean} removeAlias Also remove container alias (true)
+  * @return {ConfigManager} itself
   * @chainable
   */
-  remove(keyOrInstance, removeAlias = true) {
-    let config = keyOrInstance instanceof BaseConfig
-                ? keyOrInstance
-                : this.container.get(keyOrInstance);
+  remove(aliasOrKeyOrInstance, removeAlias = true) {
+    let config = this.get(aliasOrKeyOrInstance);
 
     // get id
-    let id = assertId(config.alias, this.configs, 'exists');
+    let id = assertId('exists', config.alias, this.configs);
 
     // remove config
     delete this.configs[id];
@@ -193,13 +202,70 @@ export class ConfigManager {
 
     return this;
   }
+
+  /**
+   * Load a Config from a plugin by moduleId
+   * @param  {string} moduleId,The module to load fron
+   * @param  {Object} configObject The config to merge into load Config
+   * @param  {string} className The class to load as Config (default = 'Config)')
+   * @param  {boolean} registerAlias:Register the aliases with the container (default=true)
+   * @return {Promise<>}
+   */
+  load(moduleId, configObject = {}, className = 'Config', registerAlias = true) {
+    // todo: make XYZConfig the default class and x-y-z the default alias
+    return this.loader.loadModule(moduleId).then(loadedModule => {
+      if (!className in loadedModule) {
+        throw new Error(`${className} not found for ${moduleId}`);
+      }
+      this.addFromContainer(loadedModule[className], configObject, moduleId, registerAlias);
+
+      LogManager.getLogger('aurelia-config').info(`Loaded ${className} from '${moduleId}'.`);
+    });
+  }
+
+  /**
+   * Configure with a list of plugins and configs
+   * @param {{plugins, configs, globalConfig, registerAlias}} plugins: [{moduleId, configObject, className}], configs: {key, configObject}, globalConfig: configObject, registerAlias: boolean
+   * @return {Promise<>}
+   */
+  configure({plugins, configs, globalConfig, registerAlias}) {
+    let promise;
+
+    // register and merge plugin Configs
+    let moduleLoaders = [];
+    (plugins || []).forEach(plugin => {
+      moduleLoaders.push(this.load(plugin.moduleId, plugin.config, plugin.className, registerAlias));
+    });
+    promise = Promise.all(moduleLoaders);
+
+    // register config objects
+    promise.then(()=>{
+      // add config objects
+      (configs || []).forEach(row => {
+        if (typeof row.key === 'string' && !this.container.hasResolver(row.key)) {
+          this.addInstance(row.key, row.config);
+        } else {
+          this.addFromContainer(row.key, row.config);
+        }
+      });
+
+      // add global config
+      this.addFromContainer(GlobalConfig, globalConfig, 'global-config', registerAlias);
+    });
+
+    return promise;
+  }
 }
 
-function assertId(id, map, option) {
-  if (!id || (map && option === 'exists' && !map[id])) {
+function assertId(type, id, map) {
+  if (!id || (map && type === 'exists' && !map[id])) {
     throw new Error(`Config class alias '${id}' is not a valid alias.`);
-  } else if (map && option === 'unique' && map[id]) {
+  } else if (map && type === 'unique' && map[id]) {
     throw new Error(`Config class alias '${id}' is not a unique alias.`);
   }
   return id;
+}
+
+function isConfig(instance) {
+  return instance instanceof BaseConfig;
 }
