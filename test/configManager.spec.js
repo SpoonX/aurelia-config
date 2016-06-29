@@ -326,9 +326,9 @@ describe('ConfigManager', function() {
 
       configManager.load('test/resources/testConfigs', {data:'xy'}, 'OtherConfig', false)
         .then(()=>{
-          expect(configManager.has('test/resources/testConfigs')).toBe(true);
-          let config = configManager.get('test/resources/testConfigs');
-          expect(configManager.container.get('test/resources/testConfigs')).not.toBe(config);
+          expect(configManager.has('test/resources/testConfigs-config')).toBe(true);
+          let config = configManager.get('test/resources/testConfigs-config');
+          expect(configManager.container.get('test/resources/testConfigs-config')).not.toBe(config);
           expect(config.current.data).toBe('xy');
           done();
         });

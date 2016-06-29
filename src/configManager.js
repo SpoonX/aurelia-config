@@ -217,7 +217,7 @@ export class ConfigManager {
       if (!className in loadedModule) {
         throw new Error(`${className} not found for ${moduleId}`);
       }
-      this.addFromContainer(loadedModule[className], configObject, moduleId, registerAlias);
+      this.addFromContainer(loadedModule[className], configObject, `${moduleId}-config`, registerAlias);
 
       LogManager.getLogger('aurelia-config').info(`Loaded ${className} from '${moduleId}'.`);
     });
