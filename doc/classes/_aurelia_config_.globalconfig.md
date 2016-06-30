@@ -2,7 +2,7 @@
 GlobalConfig class
 
 ### Extends
-* <a href="_aurelia_config_.baseconfig.md" class="tsd-signature-type">BaseConfig</a>
+* [BaseConfig](_aurelia_config_.baseconfig.md)
 
 ## Index
 
@@ -23,125 +23,115 @@ GlobalConfig class
 
 ## Constructors
 
-### new GlobalConfig(defaults
-  ) 
-
+### new GlobalConfig(defaults?: any): [GlobalConfig](_aurelia_config_.globalconfig.md)
   
-* Overwrites <a href="_aurelia_config_.baseconfig.md">BaseConfig</a>.<a href="_aurelia_config_.baseconfig.md#constructor">constructor</a>
+* Overwrites [BaseConfig](_aurelia_config_.baseconfig.md).[constructor](_aurelia_config_.baseconfig.md#constructor)
 * Defined in aurelia-config.d.ts:108
 
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| defaults |  |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| defaults? | any|  |
 
+#### Returns: [GlobalConfig](_aurelia_config_.globalconfig.md)
 
 ## Properties
 
-### alias
+### alias: any
 
-* Overwrites <a href="_aurelia_config_.baseconfig.md">BaseConfig</a>.<a href="_aurelia_config_.baseconfig.md#alias">alias</a>
+* Overwrites [BaseConfig](_aurelia_config_.baseconfig.md).[alias](_aurelia_config_.baseconfig.md#alias)
 * Defined in aurelia-config.d.ts:108
 
 
-### current
+### current: any
 The current values of your config param 
 
-* Inherited from <a href="_aurelia_config_.baseconfig.md">BaseConfig</a>.<a href="_aurelia_config_.baseconfig.md#current">current</a>
+* Inherited from [BaseConfig](_aurelia_config_.baseconfig.md).[current](_aurelia_config_.baseconfig.md#current)
 * Defined in aurelia-config.d.ts:18
 
 
-### defaults
+### defaults: any
 The defaults of your config param 
 
-* Inherited from <a href="_aurelia_config_.baseconfig.md">BaseConfig</a>.<a href="_aurelia_config_.baseconfig.md#defaults">defaults</a>
+* Inherited from [BaseConfig](_aurelia_config_.baseconfig.md).[defaults](_aurelia_config_.baseconfig.md#defaults)
 * Defined in aurelia-config.d.ts:12
 
 
 ## Methods
 
-### delete(...keys
-  ) 
-
+### delete(...keys: any[]): any
 Deletes a value from the current configuration  
-* Inherited from <a href="_aurelia_config_.baseconfig.md">BaseConfig</a>.<a href="_aurelia_config_.baseconfig.md#delete">delete</a>
+* Inherited from [BaseConfig](_aurelia_config_.baseconfig.md).[delete](_aurelia_config_.baseconfig.md#delete)
 * Defined in aurelia-config.d.ts:47
 
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| ...keys | (dot-separated) string(s) or array of keys |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| ...keys | any[]| (dot-separated) string(s) or array of keys |
 
+#### Returns: any
 
-### extend(keys
-  , value
-  ) 
-
+### extend(keys?: any, value?: any): any
 Entends an oject value in the current configuration  
-* Inherited from <a href="_aurelia_config_.baseconfig.md">BaseConfig</a>.<a href="_aurelia_config_.baseconfig.md#extend">extend</a>
+* Inherited from [BaseConfig](_aurelia_config_.baseconfig.md).[extend](_aurelia_config_.baseconfig.md#extend)
 * Defined in aurelia-config.d.ts:61
 
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| keys | (dot-separated) string(s) or array of keys |
-| value | The value to set |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| keys? | any| (dot-separated) string(s) or array of keys |
+| value? | any| The value to set |
 
+#### Returns: any
 
-### fetch(...keys
-  ) 
-
+### fetch(...keys: any[]): any
 Fetches a value from the current configuration  
-* Inherited from <a href="_aurelia_config_.baseconfig.md">BaseConfig</a>.<a href="_aurelia_config_.baseconfig.md#fetch">fetch</a>
+* Inherited from [BaseConfig](_aurelia_config_.baseconfig.md).[fetch](_aurelia_config_.baseconfig.md#fetch)
 * Defined in aurelia-config.d.ts:41
 
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| ...keys | (dot-separated) string(s) or array of keys |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| ...keys | any[]| (dot-separated) string(s) or array of keys |
 
-#### Returns:
-  
+#### Returns: any
 that The retrived value
 
 
-### reset(keys
-  ) 
-
+### reset(keys?: any): any
 Reset the current configuration back to defaults  
-* Inherited from <a href="_aurelia_config_.baseconfig.md">BaseConfig</a>.<a href="_aurelia_config_.baseconfig.md#reset">reset</a>
+* Inherited from [BaseConfig](_aurelia_config_.baseconfig.md).[reset](_aurelia_config_.baseconfig.md#reset)
 * Defined in aurelia-config.d.ts:68
 
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| keys | (dot-separated) string(s) or array of keys |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| keys? | any| (dot-separated) string(s) or array of keys |
 
+#### Returns: any
 
-### set(keys
-  , value
-  ) 
-
+### set(keys?: any, value?: any): any
 Sets a value in the current configuration  
-* Inherited from <a href="_aurelia_config_.baseconfig.md">BaseConfig</a>.<a href="_aurelia_config_.baseconfig.md#set">set</a>
+* Inherited from [BaseConfig](_aurelia_config_.baseconfig.md).[set](_aurelia_config_.baseconfig.md#set)
 * Defined in aurelia-config.d.ts:54
 
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| keys | (dot-separated) string(s) or array of keys |
-| value | The value to set |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| keys? | any| (dot-separated) string(s) or array of keys |
+| value? | any| The value to set |
 
+#### Returns: any
 

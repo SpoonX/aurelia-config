@@ -23,37 +23,35 @@ The ConfigManager classRegister and retrieve configs
 
 ## Constructors
 
-### new ConfigManager(container
-  , loader
-  ) 
-
+### new ConfigManager(container?: any, loader?: any): [ConfigManager](_aurelia_config_.configmanager.md)
 Creates an instance of the ConfigManager  
 * Defined in aurelia-config.d.ts:134
 
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| container | The container for the Configs |
-| loader | The loader for the Configs |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| container? | any| The container for the Configs |
+| loader? | any| The loader for the Configs |
 
+#### Returns: [ConfigManager](_aurelia_config_.configmanager.md)
 
 ## Properties
 
-### configs
+### configs: any
 POJO map of the registered configs param 
 
 * Defined in aurelia-config.d.ts:122
 
 
-### container
+### container: any
 The container for the Configs param 
 
 * Defined in aurelia-config.d.ts:128
 
 
-### loader
+### loader: any
 The Config loader param 
 
 * Defined in aurelia-config.d.ts:134
@@ -61,12 +59,7 @@ The Config loader param
 
 ## Methods
 
-### addFromContainer(key
-  , configObject
-  , alias
-  , registerAlias
-  ) 
-
+### addFromContainer(key?: any, configObject?: any, alias?: any, registerAlias?: any): any
 Add a Config by key from the container chainable 
   
 * Defined in aurelia-config.d.ts:176
@@ -74,22 +67,17 @@ Add a Config by key from the container chainable
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| key | The container key |
-| configObject | The configuration object |
-| alias | The aiias to register under if none is set in config.alias |
-| registerAlias | Register with container (true) |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| key? | any| The container key |
+| configObject? | any| The configuration object |
+| alias? | any| The aiias to register under if none is set in config.alias |
+| registerAlias? | any| Register with container (true) |
 
-#### Returns:
-  
+#### Returns: any
 itself
 
-### addInstance(alias
-  , configObject
-  , registerAlias
-  ) 
-
+### addInstance(alias?: any, configObject?: any, registerAlias?: any): any
 Add a Config from a BaseConfig or Object chainable 
   
 * Defined in aurelia-config.d.ts:165
@@ -97,21 +85,16 @@ Add a Config from a BaseConfig or Object chainable
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| alias | The unique alias to register under |
-| configObject |  |
-| registerAlias | Register with container (true) |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| alias? | any| The unique alias to register under |
+| configObject? | any|  |
+| registerAlias? | any| Register with container (true) |
 
-#### Returns:
-  
+#### Returns: any
 itself
 
-### copy(targetAliasOrKeyOrInstance
-  , sourceAliasOrKeyOrInstance
-  , includeDefaults
-  ) 
-
+### copy(targetAliasOrKeyOrInstance?: any, sourceAliasOrKeyOrInstance?: any, includeDefaults?: any): any
 Deep copy a Config into another chainable 
   
 * Defined in aurelia-config.d.ts:186
@@ -119,21 +102,16 @@ Deep copy a Config into another chainable
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| targetAliasOrKeyOrInstance | The target alias, container key or an instance of BaseConfig |
-| sourceAliasOrKeyOrInstance | The source alias, container key or an instance of BaseConfig |
-| includeDefaults | Also copy defaults |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| targetAliasOrKeyOrInstance? | any| The target alias, container key or an instance of BaseConfig |
+| sourceAliasOrKeyOrInstance? | any| The source alias, container key or an instance of BaseConfig |
+| includeDefaults? | any| Also copy defaults |
 
-#### Returns:
-  
+#### Returns: any
 itself
 
-### extend(targetAliasOrKeyOrInstance
-  , sourceAliasOrKeyOrInstance
-  , includeDefaults
-  ) 
-
+### extend(targetAliasOrKeyOrInstance?: any, sourceAliasOrKeyOrInstance?: any, includeDefaults?: any): any
 Deep extend a Config with another chainable 
   
 * Defined in aurelia-config.d.ts:196
@@ -141,80 +119,64 @@ Deep extend a Config with another chainable
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| targetAliasOrKeyOrInstance |  |
-| sourceAliasOrKeyOrInstance |  |
-| includeDefaults | Also merge defaults |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| targetAliasOrKeyOrInstance? | any|  |
+| sourceAliasOrKeyOrInstance? | any|  |
+| includeDefaults? | any| Also merge defaults |
 
-#### Returns:
-  
+#### Returns: any
 itself
 
-### get(aliasOrKeyOrInstance
-  ) 
-
+### get(aliasOrKeyOrInstance?: any): any
 Resolves an alias or container key or instance to Config instance  
 * Defined in aurelia-config.d.ts:155
 
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| aliasOrKeyOrInstance | The target alias or container key or a BaseConfig instance |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| aliasOrKeyOrInstance? | any| The target alias or container key or a BaseConfig instance |
 
-#### Returns:
-  
+#### Returns: any
 that
 
 
-### has(alias
-  ) 
-
+### has(alias?: any): any
 Has alias registered  
 * Defined in aurelia-config.d.ts:148
 
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| alias | The requested alias |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| alias? | any| The requested alias |
 
-#### Returns:
-  
+#### Returns: any
 that
 
 
-### load(moduleId
-  , configObject
-  , className
-  , registerAlias
-  ) 
-
+### load(moduleId?: any, configObject?: any, className?: any, registerAlias?: any): any
 Load a Config from a plugin by moduleId  
 * Defined in aurelia-config.d.ts:215
 
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| moduleId |  |
-| configObject | The config to merge into load Config |
-| className | The class to load as Config (default = 'Config)') |
-| registerAlias |  |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| moduleId? | any|  |
+| configObject? | any| The config to merge into load Config |
+| className? | any| The class to load as Config (default = 'Config)') |
+| registerAlias? | any|  |
 
-#### Returns:
-  
-
+#### Returns: any
 
 
-### remove(aliasOrKeyOrInstance
-  , removeAlias
-  ) 
 
+### remove(aliasOrKeyOrInstance?: any, removeAlias?: any): any
 Remove a Config from the ConfigManager chainable 
   
 * Defined in aurelia-config.d.ts:205
@@ -222,12 +184,11 @@ Remove a Config from the ConfigManager chainable
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| aliasOrKeyOrInstance | The target alias or container key or an instance of BaseConfig |
-| removeAlias | Also remove container alias (true) |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| aliasOrKeyOrInstance? | any| The target alias or container key or an instance of BaseConfig |
+| removeAlias? | any| Also remove container alias (true) |
 
-#### Returns:
-  
+#### Returns: any
 itself
 

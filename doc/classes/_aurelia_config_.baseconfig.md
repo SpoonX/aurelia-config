@@ -20,35 +20,34 @@ BaseConfig class
 
 ## Constructors
 
-### new BaseConfig(defaults
-  ) 
-
+### new BaseConfig(defaults?: any): [BaseConfig](_aurelia_config_.baseconfig.md)
 Creates an instance of BaseConfig. Copies defaults into current  
 * Defined in aurelia-config.d.ts:24
 
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| defaults | Set the defaults. Required! |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| defaults? | any| Set the defaults. Required! |
 
+#### Returns: [BaseConfig](_aurelia_config_.baseconfig.md)
 
 ## Properties
 
-### alias
+### alias: any
 Derived classes should set an alternative alias param 
 
 * Defined in aurelia-config.d.ts:24
 
 
-### current
+### current: any
 The current values of your config param 
 
 * Defined in aurelia-config.d.ts:18
 
 
-### defaults
+### defaults: any
 The defaults of your config param 
 
 * Defined in aurelia-config.d.ts:12
@@ -56,81 +55,72 @@ The defaults of your config param
 
 ## Methods
 
-### delete(...keys
-  ) 
-
+### delete(...keys: any[]): any
 Deletes a value from the current configuration  
 * Defined in aurelia-config.d.ts:47
 
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| ...keys | (dot-separated) string(s) or array of keys |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| ...keys | any[]| (dot-separated) string(s) or array of keys |
 
+#### Returns: any
 
-### extend(keys
-  , value
-  ) 
-
+### extend(keys?: any, value?: any): any
 Entends an oject value in the current configuration  
 * Defined in aurelia-config.d.ts:61
 
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| keys | (dot-separated) string(s) or array of keys |
-| value | The value to set |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| keys? | any| (dot-separated) string(s) or array of keys |
+| value? | any| The value to set |
 
+#### Returns: any
 
-### fetch(...keys
-  ) 
-
+### fetch(...keys: any[]): any
 Fetches a value from the current configuration  
 * Defined in aurelia-config.d.ts:41
 
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| ...keys | (dot-separated) string(s) or array of keys |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| ...keys | any[]| (dot-separated) string(s) or array of keys |
 
-#### Returns:
-  
+#### Returns: any
 that The retrived value
 
 
-### reset(keys
-  ) 
-
+### reset(keys?: any): any
 Reset the current configuration back to defaults  
 * Defined in aurelia-config.d.ts:68
 
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| keys | (dot-separated) string(s) or array of keys |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| keys? | any| (dot-separated) string(s) or array of keys |
 
+#### Returns: any
 
-### set(keys
-  , value
-  ) 
-
+### set(keys?: any, value?: any): any
 Sets a value in the current configuration  
 * Defined in aurelia-config.d.ts:54
 
 
 #### Parameters
 
-| Name | Description |
-| ---- | ---- 
-| keys | (dot-separated) string(s) or array of keys |
-| value | The value to set |
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| keys? | any| (dot-separated) string(s) or array of keys |
+| value? | any| The value to set |
 
+#### Returns: any
 
