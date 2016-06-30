@@ -19,6 +19,7 @@ module.exports = {
   style: 'styles/**/*.css',
   output: 'dist/',
   doc: './doc',
+  theme: './node_modules/typedoc-markdown-theme/bin',
   test: './test/**/*.js',
   packageName: pkg.name
 };

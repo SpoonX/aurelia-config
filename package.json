@@ -88,6 +88,7 @@
     "run-sequence": "^1.0.2",
     "snyk": "^1.8.4",
     "through2": "^2.0.0",
+    "typedoc-markdown-theme": "0.0.4",
     "vinyl-paths": "^2.1.0",
     "yargs": "^4.3.2"
   }

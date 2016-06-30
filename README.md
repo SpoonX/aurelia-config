@@ -14,13 +14,15 @@ This library is used by plugins and applications.
 
 ## Installation for plugin developers
 
-There isn't much to do. Just tell the users to add it to the plugin list for aurelia-config and make sure your plugin exports an class or object named 'Config' (default). The user settings will get merged into that class or object.
+There isn't much to do. Just tell the users to add it to the plugin list for aurelia-config and make sure your plugin exports a class or object named 'Config' (default). The user settings will get merged into that class or object.
 
 ## Installation for applications
 
-Installing this module is fairly simple.
-
 Run `jspm i aurelia-config` from your project root or `npm i aurelia-config --save` when using webpack.
+
+## Api documentation
+
+See aurelia-config [documentation](doc/modules/_aurelia_config_.md)
 
 ## Usage
 
