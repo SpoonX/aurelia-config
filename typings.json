@@ -1,0 +1,4 @@
+{
+  "name": "aurelia-config",
+  "main": "dist/aurelia-config.d.ts"
+}

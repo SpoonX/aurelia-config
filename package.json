@@ -1,0 +1,72 @@
+{
+  "name": "aurelia-config",
+  "version": "0.0.1",
+  "description": "A configuration service for aurelia plugins.",
+  "keywords": [
+    "aurelia",
+    "plugin",
+    "configuration"
+  ],
+  "homepage": "https://github.com/SpoonX/aurelia-config",
+  "bugs": {
+    "url": "https://github.com/SpoonX/aurelia-config/issues"
+  },
+  "license": "MIT",
+  "author": "SpoonX <info@spoonx.nl>",
+  "contributors": [
+    "doktordirk <doktordirk@outlook.de> (http://spoonx.nl)"
+  ],
+  "main": "dist/commonjs/aurelia-config.js",
+  "typings": "dist/aurelia-config.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SpoonX/aurelia-config"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/gulp test"
+  },
+  "jspm": {
+    "registry": "npm",
+    "jspmPackage": true,
+    "main": "aurelia-config",
+    "format": "amd",
+    "directories": {
+      "dist": "dist/amd"
+    },
+    "dependencies": {
+      "aurelia-dependency-injection": "^1.0.0",
+      "aurelia-framework": "^1.0.1",
+      "aurelia-loader": "^1.0.0",
+      "aurelia-logging": "^1.0.0",
+      "homefront": "^1.2.0"
+    },
+    "peerDependencies": {
+      "aurelia-dependency-injection": "^1.0.0",
+      "aurelia-framework": "^1.0.1",
+      "aurelia-loader": "^1.0.0",
+      "aurelia-logging": "^1.0.0",
+      "homefront": "^1.2.0"
+    },
+    "devDependencies": {
+      "aurelia-loader-default": "^1.0.0",
+      "aurelia-pal-browser": "^1.0.0",
+      "aurelia-polyfills": "^1.0.0",
+      "test-plugin": "github:doktordirk/aurelia-plugin-skeleton@test"
+    }
+  },
+  "dependencies": {
+    "aurelia-dependency-injection": "^1.0.0",
+    "aurelia-framework": "^1.0.1",
+    "aurelia-loader": "^1.0.0",
+    "aurelia-logging": "^1.0.0",
+    "homefront": "^1.2.0"
+  },
+  "devDependencies": {
+    "spoonx-tools": "github:spoonx/spoonx-tools#master"
+  },
+  "aurelia": {
+    "build": {
+      "resources": []
+    }
+  }
+}
