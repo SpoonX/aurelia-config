@@ -26,6 +26,12 @@ This library is used by plugins and applications.
 
 - [homefront](https://www.npmjs.com/package/homefront).
 
+## Documentation
+
+You can find usage examples and the documentation at [aurelia-config-doc](http://aurelia-config.spoonx.org/).
+
+The [changelog](doc/changelog.md) provides you with information about important changes.
+
 ## Installation for plugin developers
 
 Run `jspm i aurelia-config` from your plugin root resp. `npm i aurelia-config --save`.
@@ -73,139 +79,3 @@ Add `'aurelia-config'` in the `coreBundles.aurelia section` of your `webpack.con
 ### Typescript
 
 Npm-based installations pick up the typings automatically. For Jspm-based installations, run `typings i github:spoonx/aurelia-config` or add `"aurelia-config": "github:spoonx/aurelia-config",` to your `typings.json` and run `typings i`.
-
-## Usage
-
-### Configure aurelia-config in your app
-
-Your basic configuration file just exports a simple object with (preferably name-spaced) configuration settings, eg.:
-
-```js
-export let appConfig = {
-  'aurelia-api': {
-    api: 'http://example.com/api',
-    auth: 'http://example.com/auth'
-  },
-  'aurelia-authentication': {
-    endpoint: 'auth',
-    configureEndpoints: true
-  }
-}
-```
-
-Register the with aurelia-config the plugin configs and your appConfig.
-
-```js
-let someConfig = { key: 'value'};
-
-aurelia.use
-  // aurelia-config should be before other plugins which use aurelia-config so that they can use your appConfig setting already during configuration
-  .plugin('aurelia-config', [
-    /* a plugin which follows the convention aka exports a object named 'config' */
-    'aurelia-api',
-    /* a plugin which exports a configuration object named 'baseConfig' */
-    {
-      name: 'aurelia-authentication',
-      configName: 'baseConfig'
-    },
-    /* a configuration object */
-    someConfig,
-    /* a local configuration which which exports a object named 'config' */
-    './appConfig'
-  ])
-  /* Other plugins that use aurelia-config don't need any or much configuration anymore */
-  .plugin('aurelia-api')
-  /* but you still can overwrite or add settings if the plugin allows that*/
-  .plugin('aurelia-authentication', {
-    configureEndpoints: 'false'
-  });
-```
-
-Configs get added in order of the array. So, later called plugins overwrite previous settings. Hence, your `appConfig` should be the last entry in that array.
-
-### Configure aurelia-config in your plugin
-
-Your configuration file just exports a simple object with the configuration settings. It's best named 'config' and uses the plugin name as namespace), eg.:
-
-```js
-export let config = {
-  'aurelia-authentication': {
-    endpoint: null,
-    configureEndpoints: false
-  }
-}
-```
-
-In your exported configure function, you can get it by namespace, eg:
-
-```js
-import {Config} from 'aurelia-config';
-
-export function configure(aurelia, configCallback) {
-  let authConfig = aurelia.container.get(Config).use('aurelia-authentication');
-  // authConfig = {endpoint: null, configureEndpoints: false }
-
-  // do something based on authConfig
-}
-```
-
-### Use aurelia-config in your app or plugin
-
-You can use aurelia-config then everywhere in your plugins or application by injecting `Config` into your class, eg:
-
-```js
-import {Config} from 'aurelia-config';
-import {inject} from 'aurelia-dependency-injection';
-
-@inject(Config)
-export SomeClass {
-  constructor(config) {
-    let authEnpoint = config.fetch('aurelia-config.endpoints.auth');
-    // or restrict it to a domain for a simpler use in the class
-    this.config = config.use('aurelia-config');
-    let apiEnpoint = this.config.fetch('endpoints.api');
-
-    // or use the data object directly
-    this.configData = config.use('aurelia-config').data;
-    let userEndpoint = this.configData.endpoints.user;
-  }
-}
-```
-
-or use the Configuration resolver to inject the desired config segment.
-
-```js
-import {Configuration} from 'aurelia-config';
-import {inject} from 'aurelia-dependency-injection';
-
-@inject(Configuration.of('aurelia-api'))
-export SomeClass {
-  constructor(config) {
-    let authEnpoint = config.fetch('endpoints.auth');
-    let userEndpoint = config.data.endpoints.user;
-  }
-}
-```
-
-## Quick Homefront api overview
-
-Since aurelia-config extends [homefront](https://www.npmjs.com/package/homefront), all of homefront's methods are available on the Config instance or a segments of it (when made with config.use('namespace')). Some methods homefronts gives you:
-
-```js
-  // contains the data in a single object
-  .data            
-  // recursively merges given sources into data.          
-  .merge(sources)  
-  // Fetches value of given key.
-  .fetch(key, defaultValue)    
-  //Convenience method. Calls .fetch(), and on null result calls .put() using provided toPut.
-  .fetchOrPut(key, toPut)
-  // Sets value for a key (creates object in path when not found).
-  .put(key, value)    
-  // Removes value by key.
-  .remove(key)   
-  // Search and return keys and values that match given string.
-  .search(phrase)
-```
-
-Keys can be dot separated strings or an array of keys

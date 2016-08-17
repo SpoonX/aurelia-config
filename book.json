@@ -1,0 +1,17 @@
+
+{
+    "root": "./doc",
+    "plugins": [
+        "edit-link",
+        "github"
+    ],
+    "pluginsConfig": {
+        "edit-link": {
+            "base": "https://github.com/SpoonX/aurelia-plugin-skeleton/edit/master/doc",
+            "label": "Edit This Page"
+        },
+        "github": {
+            "url": "https://github.com/spoonx/aurelia-plugin-skeleton"
+        }
+    }
+}
