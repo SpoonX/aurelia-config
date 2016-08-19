@@ -1,0 +1,26 @@
+{
+  "name": "aurelia-config",
+  "version": "0.0.1",
+  "description": "A configuration service for aurelia plugins.",
+  "keywords": [
+    "aurelia",
+    "plugin",
+    "configuration"
+  ],
+  "homepage": "https://github.com/SpoonX/aurelia-config",
+  "main": "dist/commonjs/aurelia-config.js",
+  "moduleType": "node",
+  "license": "MIT",
+  "author": "Dirk Eisinger <doktordirk@outlook.de>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SpoonX/aurelia-config"
+  },
+  "dependencies": {
+    "aurelia-dependency-injection": "^1.0.0",
+    "aurelia-framework": "^1.0.1",
+    "aurelia-loader": "^1.0.0",
+    "aurelia-logging": "^1.0.0",
+    "homefront": "^1.2.0"
+  }
+}
