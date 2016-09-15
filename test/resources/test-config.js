@@ -1,11 +1,11 @@
 // not napespaced
-export let defaults = {
-  foo: {
-    bar: 'bazzing',
-    buz: 'buzzing'
+export let config = {
+  'test/resources/test-config': {
+    foo: {
+      bar: 'bazzing',
+      buz: 'buzzing'
+    }
   }
 };
 
-export let configure = function configure(aurelia, config) {
-  return config;
-};
+export let configure = function configure(use, userConfig) {};

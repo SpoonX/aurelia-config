@@ -1,41 +1,77 @@
 import {Container} from 'aurelia-dependency-injection';
 import {DefaultLoader} from 'aurelia-loader-default';
-import {configure} from 'src/aurelia-config';
+import {Aurelia} from 'aurelia-framework';
 import {Config} from 'src/config';
 
-function getAurelia() {
-  return {container: new Container, loader: new DefaultLoader};
-}
+import * as simplePlugin from 'test/resources/simple-config';
+import * as testPlugin from 'test/resources/test-config';
+import * as otherPlugin from 'test/resources/test-config-other';
 
-function getFrameworkConfiguration() {
-  let aurelia = getAurelia();
-  return {aurelia: aurelia, container: aurelia.container, plugin: null};
+function getAurelia() {
+  return new Aurelia(new DefaultLoader, new Container);
 }
 
 describe('configure', () => {
-  it('Should configure with a array of plugins and appConfigs rest', done => {
-    let frameworkConfiguration = getFrameworkConfiguration();
-    let plugins    = [{key: 'value'}];
-    let appConfig  = {foo: 'bar'};
+  it('Should configure with an plugins without config and appConfigs rest', done => {
+    let aurelia = getAurelia();
+    let frameworkConfiguration = aurelia.use;
+    let plugins    = ['test/resources/simple-config'];
+    let appConfig  = {foo: {'bar': 'bang'}};
 
-    configure(frameworkConfiguration, plugins, appConfig).then(res => {
+    spyOn(simplePlugin, 'configure');
+
+    frameworkConfiguration.plugin('src/aurelia-config', configure => configure(plugins, appConfig));
+
+    frameworkConfiguration.apply().then(res => {
       let config = frameworkConfiguration.container.get(Config);
+      let merged = Config.merge({'test/resources/simple-config': {}}, appConfig);
 
-      expect(JSON.stringify(config.data)).toBe('{"aurelia-config":{"configure":true},"key":"value","foo":"bar"}');
-      expect(res).not.toBeDefined();
+      expect(JSON.stringify(config.data)).toBe(JSON.stringify(merged));
+      expect(simplePlugin.configure).toHaveBeenCalledWith(frameworkConfiguration, config.data['test/resources/simple-config']);
     }).then(done);
   });
 
-  it('Should not configure but only merge defaults when aurelia-config.configure=false', done => {
-    let frameworkConfiguration = getFrameworkConfiguration();
-    let plugins    = [{key: 'value'}];
-    let appConfig  = {'aurelia-config': {configure: false}, foo: 'bar'};
 
-    configure(frameworkConfiguration, plugins, appConfig).then(res => {
+  it('Should configure with an array of plugins and appConfigs rest', done => {
+    let aurelia = getAurelia();
+    let frameworkConfiguration = aurelia.use;
+    let plugins    = ['test/resources/test-config'];
+    let appConfig  = {foo: {'bar': 'bang'}};
+
+    spyOn(testPlugin, 'configure');
+
+    frameworkConfiguration.plugin('src/aurelia-config', configure => configure(plugins, appConfig));
+
+    frameworkConfiguration.apply().then(res => {
       let config = frameworkConfiguration.container.get(Config);
+      let merged = Config.merge({}, testPlugin.config, appConfig);
 
-      expect(JSON.stringify(config.data)).toBe('{"aurelia-config":{"configure":false},"key":"value","foo":"bar"}');
-      expect(res).toBe(null);
+      expect(JSON.stringify(config.data)).toBe(JSON.stringify(merged));
+      expect(testPlugin.configure).toHaveBeenCalledWith(frameworkConfiguration, config.data['test/resources/test-config']);
+    }).then(done);
+  });
+
+  it('Should configure with an array of plugins and appConfigs rest in right order', done => {
+    let aurelia = getAurelia();
+    let frameworkConfiguration = aurelia.use;
+    let plugins = [
+      {moduleId: 'test/resources/test-config'},
+      {moduleId: 'test/resources/test-config-other', rootConfig: true}
+    ];
+    let appConfig = {foo: {'bar': 'bang'}};
+
+    spyOn(testPlugin, 'configure');
+    spyOn(otherPlugin, 'configure');
+
+    frameworkConfiguration.plugin('src/aurelia-config', configure => configure(plugins, appConfig));
+
+    frameworkConfiguration.apply().then(res => {
+      let config = frameworkConfiguration.container.get(Config);
+      let merged = Config.merge({}, testPlugin.config, otherPlugin.config, appConfig);
+
+      expect(JSON.stringify(config.data)).toBe(JSON.stringify(merged));
+      expect(testPlugin.configure).toHaveBeenCalledWith(frameworkConfiguration, config.data['test/resources/test-config']);
+      expect(otherPlugin.configure).toHaveBeenCalledWith(frameworkConfiguration, config.data);
     }).then(done);
   });
 });

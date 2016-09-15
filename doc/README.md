@@ -1,41 +1,53 @@
-# Overview
+# aurelia-config
 
-Sick of configuring every plugin separately, inconsistent naming and one plugin not knowing what the other does. Here comes the solution. One app config file for all your plugin. It works as follows:
-At aurelia configuration you tell aurelia-config which plugin defaults it should load and the app config objects you want to merge into that sequentially. Then it (optionally) calls sequentially the plugin configurations on them with the (plugin namepsaced) merged settings. 
-The merged settings (as an instance of [homefront](https://www.npmjs.com/package/homefront)) can be easily accessed from everywhere in your app or your plugins. The usage of aliass per plugins and a Configuration resolver even simplifies that.
+Aurelia-config is an aurelia plugin that allows you to load and configure plugins in a normalized manner.
 
-- One config to rule them all
-- Automatically load and merge plugin and app configs
-- Namespaces and a Configuration resolver allow easier access of selected config segments
-- All [homefront](https://www.npmjs.com/package/homefront) methods are available on the config instance.
+## Overview
+Using this plugin you can make it a lot easier to allow for configuration using [IoC](https://en.wikipedia.org/wiki/Inversion_of_control).
 
-## Used By
-
-This library is used by plugins and applications.
-
-## Uses
-
-- [homefront](https://www.npmjs.com/package/homefront).
-
-## Quick Homefront api overview
-
-Since aurelia-configs Config class extends [homefront](https://www.npmjs.com/package/homefront), all of homefront's methods are available on the Config instance or a segments of it (when made with config.use('alias')). Some of the methods homefronts gives you are:
+### For plugin developers
+You can allow app developers to configure your plugin through a simple config object. The way you expose it is simple: export an object literal called `config`, and give it a namespace / key to use. This is the same object your `configure()` function will receive upon plugin-configuration time.
 
 ```js
-  // contains the data in a single object
-  .data            
-  // recursively merges given sources into data.          
-  .merge(sources)  
-  // Fetches value of given key.
-  .fetch(key, defaultValue)    
-  //Convenience method. Calls .fetch(), and on null result calls .put() using provided toPut.
-  .fetchOrPut(key, toPut)
-  // Sets value for a key (creates object in path when not found).
-  .put(key, value)    
-  // Removes value by key.
-  .remove(key)   
-  // Search and return keys and values that match given string.
-  .search(phrase)
+// your-plugin.js
+
+export function configure(aurelia, config) {
+  // config is pojo
+}
+
+export {
+  /* you need to namespace your defaults */
+  'your-plugin': {
+    /* This is your (optional) default config. */
+  }
+} as config;
 ```
 
-Keys can be dot separated strings or an array of keys
+Now app developers can use this config. Keep on reading to figure out how.
+
+### For app developers
+In stead of using `.plugin()` for every plugin, you only use it for the `aurelia-config` plugin. Aurelia-config will register the rest of the plugins, using the corresponding namespace segment of your exported default config (if existing) merged with the appConfigOverwrites.
+
+```js
+// Example config
+let appConfigOverwrites = {
+  'aurelia-api': {
+    endpoints: [
+      {name: 'api', url: 'http://127.0.0.1:1337/'}
+    ]
+  },
+  'aurelia-notification': {
+    baseClass: 'custom-notifications'
+  }
+};
+
+// Configure function
+export function configure(aurelia) {
+  aurelia.use
+    .standardConfiguration()
+    .plugin('aurelia-config', [
+      'aurelia-api',
+      'aurelia-notification',
+    ], appConfigOverwrites);
+}
+```

@@ -14,6 +14,7 @@ System.config({
     "aurelia-logging": "npm:aurelia-logging@1.0.0",
     "aurelia-pal-browser": "npm:aurelia-pal-browser@1.0.0",
     "aurelia-polyfills": "npm:aurelia-polyfills@1.0.0",
+    "extend": "npm:extend@3.0.0",
     "homefront": "npm:homefront@1.2.0",
     "npm:aurelia-binding@1.0.1": {
       "aurelia-logging": "npm:aurelia-logging@1.0.0",

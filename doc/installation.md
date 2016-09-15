@@ -2,7 +2,7 @@
 
 ## Installation for plugin developers
 
-Run `jspm i aurelia-config` from your plugin root resp. `npm i aurelia-config --save`.
+If you additionally want to use `aurelia-config` to access the global configuration, you can install it for Jspm with `jspm i aurelia-config` from your plugin root resp. `npm i aurelia-config --save` for webpack or aurelia-cli.
 
 ## Installation for applications
 
