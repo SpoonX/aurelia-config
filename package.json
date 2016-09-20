@@ -50,8 +50,7 @@
     "devDependencies": {
       "aurelia-loader-default": "^1.0.0",
       "aurelia-pal-browser": "^1.0.0",
-      "aurelia-polyfills": "^1.0.0",
-      "extend": "^3.0.0"
+      "aurelia-polyfills": "^1.0.0"
     }
   },
   "dependencies": {
