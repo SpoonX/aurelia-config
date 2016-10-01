@@ -1,7 +1,12 @@
 import {Homefront} from 'homefront';
 
 /**
- * @extends Homefront
- * Config class
+ * The Config class
+ *
+ * @export
+ * @class Config
+ * @extends {Homefront}
+ *
+ * @see https://github.com/spoonx/homefront
  */
 export class Config extends Homefront {}

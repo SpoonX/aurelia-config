@@ -23,9 +23,10 @@ export class Configuration {
   /**
    * Resolve for namespace.
    *
-   * @param {Container} container The container
+   * @param {Container} container
+   * @return {{}}
    *
-   * @return {}
+   * @memberOf Configuration
    */
   get(container: Container): {} {
     return container.get(Config).fetch(this._namespace);
