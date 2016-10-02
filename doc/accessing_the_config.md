@@ -1,4 +1,4 @@
-# Usage
+# Accessing the configuration in the app or a plugin
 
 You can use aurelia-config everywhere in your plugins or application by injecting `Config` into your class, eg:
 

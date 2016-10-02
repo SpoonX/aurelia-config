@@ -1,23 +1,59 @@
 # aurelia-config
 
-Aurelia-config is configuration loader and handler (using [homefront](https://www.npmjs.com/package/homefront)) that allows you to expose and centralize your configuration.
+Aurelia-config is an aurelia plugin that allows you to load and configure plugins in a normalized manner.
 
+[![Build Status](https://travis-ci.org/SpoonX/aurelia-api.svg?branch=master)](https://travis-ci.org/SpoonX/aurelia-api)
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?maxAge=2592000?style=plastic)](https://gitter.im/SpoonX/Dev)
 
-This library is an unofficial plugin for the [Aurelia](http://www.aurelia.io/) platform and simplifies plugin configuration by collecting them in a single place.
-
-> To keep up to date on [Aurelia](http://www.aurelia.io/), please visit and subscribe to [the official blog](http://blog.durandal.io/). If you have questions, we invite you to [join us on Gitter](https://gitter.im/aurelia/discuss). If you would like to have deeper insight into our development process, please install the [ZenHub](https://zenhub.io) Chrome Extension and visit any of our repository's boards. You can get an overview of all Aurelia work by visiting [the framework board](https://github.com/aurelia/framework#boards).
-
 ## Overview
+Using this plugin you can make it a lot easier to allow for configuration using [IoC](https://en.wikipedia.org/wiki/Inversion_of_control).
 
-Sick of configuring every plugin separately, inconsistent naming and one plugin not knowing what the other does. Here comes the solution. One app config file for all your plugin. It works as follows:
-At aurelia configuration you tell aurelia-config which plugin defaults it should load and the app config objects you want to merge into that sequentially. Then it (optionally) calls sequentially the plugin configurations on them with the (plugin namepsaced) merged settings. 
-The merged settings (as an instance of [homefront](https://www.npmjs.com/package/homefront)) can be easily accessed from everywhere in your app or your plugins. The usage of namespaces per plugins and a Configuration resolver even simplifies that.
+### For plugin developers
+You can allow app developers to configure your plugin through a simple config object. The way you expose it is simple: export an object literal called `config`, and give it a namespace / key to use. This is the same object your `configure()` function will receive upon plugin-configuration time.
 
-- One config to rule them all
-- Automatically load and merge plugin and app configs
-- Namespaces and a Configuration resolver allow easier access of selected config segments
-- All [homefront](https://www.npmjs.com/package/homefront) methods are available on the config instance.
+```js
+// your-plugin.js
+
+export function configure(aurelia, config) {
+  // config is pojo
+}
+
+export {
+  /* you need to namespace your defaults */
+  'your-plugin': {
+    /* This is your (optional) default config. */
+  }
+} as config;
+```
+
+Now app developers can use this config. Keep on reading to figure out how.
+
+### For app developers
+In stead of using `.plugin()` for every plugin, you only use it for the `aurelia-config` plugin. Aurelia-config will register the rest of the plugins, using the corresponding namespace segment of your exported default config (if existing) merged with the appConfigOverwrites.
+
+```js
+// Example config
+let appConfigOverwrites = {
+  'aurelia-api': {
+    endpoints: [
+      {name: 'api', url: 'http://127.0.0.1:1337/'}
+    ]
+  },
+  'aurelia-notification': {
+    baseClass: 'custom-notifications'
+  }
+};
+
+// Configure function
+export function configure(aurelia) {
+  aurelia.use
+    .standardConfiguration()
+    .plugin('aurelia-config', [
+      'aurelia-api',
+      'aurelia-notification',
+    ], appConfigOverwrites);
+}
+```
 
 ## Used By
 
@@ -35,7 +71,7 @@ The [changelog](doc/changelog.md) provides you with information about important 
 
 ## Installation for plugin developers
 
-Run `jspm i aurelia-config` from your plugin root resp. `npm i aurelia-config --save`.
+If you additionally want to use `aurelia-config` to access the global configuration, you can install it for Jspm with `jspm i aurelia-config` from your plugin root resp. `npm i aurelia-config --save` for webpack or aurelia-cli.
 
 ## Installation for applications
 
