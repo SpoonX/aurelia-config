@@ -10,5 +10,5 @@ import {PluginManager} from './plugin-manager';
 export function configure(use: FrameworkConfiguration, callback: Function): any {
   let pluginManager = use.container.get(PluginManager);
 
-  callback((plugins: Array<stringPluginDefinition>, ...appConfigs: {}) => pluginManager.configure(use, plugins, ...appConfigs));
+  return callback((plugins: Array<stringPluginDefinition>, ...appConfigs: {}) => pluginManager.configure(use, plugins, ...appConfigs));
 }
