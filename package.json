@@ -23,7 +23,12 @@
     "url": "https://github.com/SpoonX/aurelia-config"
   },
   "scripts": {
-    "test": "./node_modules/.bin/gulp test"
+    "test": "gulp test",
+    "build": "gulp build",
+    "build:compile": "concurrently \"tsc --allowJs -d --project tsconfig.build.json --outDir dist/tsc\"",
+    "preversion": "npm test",
+    "version": "npm run build && gulp prepare-package && git add -A dist doc/CHANGELOG.md bower.json",
+    "postpublish": "git push upstream master && git push upstream --tags"
   },
   "jspm": {
     "registry": "npm",
@@ -61,7 +66,7 @@
     "homefront": "^1.2.0"
   },
   "devDependencies": {
-    "spoonx-tools": "^0.3.0"
+    "spoonx-tools": "^0.4.0"
   },
   "aurelia": {
     "build": {
