@@ -64,5 +64,5 @@ export let Configuration = (_dec2 = resolver(), _dec2(_class2 = class Configurat
 export function configure(use, callback) {
   let pluginManager = use.container.get(PluginManager);
 
-  callback((plugins, ...appConfigs) => pluginManager.configure(use, plugins, ...appConfigs));
+  return callback((plugins, ...appConfigs) => pluginManager.configure(use, plugins, ...appConfigs));
 }

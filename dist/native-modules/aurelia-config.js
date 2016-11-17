@@ -100,7 +100,7 @@ export var Configuration = (_dec2 = resolver(), _dec2(_class2 = function () {
 export function configure(use, callback) {
   var pluginManager = use.container.get(PluginManager);
 
-  callback(function (plugins) {
+  return callback(function (plugins) {
     for (var _len2 = arguments.length, appConfigs = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
       appConfigs[_key2 - 1] = arguments[_key2];
     }
