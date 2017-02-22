@@ -48,10 +48,12 @@ let appConfigOverwrites = {
 export function configure(aurelia) {
   aurelia.use
     .standardConfiguration()
-    .plugin('aurelia-config', [
-      'aurelia-api',
-      'aurelia-notification',
-    ], appConfigOverwrites);
+    .plugin('aurelia-config', configure => {
+      return configure([
+        'aurelia-api',
+        'aurelia-notification',
+      ], appConfigOverwrites);
+    });
 }
 ```
 

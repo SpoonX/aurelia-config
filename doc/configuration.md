@@ -27,7 +27,8 @@ Some examples:
 
 ```js
 aurelia.use
-  .plugin('aurelia-config', [
+  .plugin('aurelia-config', configure => {
+    return configure([
       // load and merge exported object 'config', if existing, 
       // and configure 'plugin-name' with mergedConfig['plugin-name'] 
       'plugin-name',
