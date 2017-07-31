@@ -21,7 +21,7 @@ export declare class Config extends Homefront {
  * @export
  * @interface PluginDefinition
  */
-export declare export declare interface PluginDefinition {
+export declare interface PluginDefinition {
   
   /**
      * The moduleId as used by aurelia
@@ -46,4 +46,4 @@ export declare export declare interface PluginDefinition {
      * @memberOf PluginDefinition
      */
   rootConfig?: boolean;
-};
+}
