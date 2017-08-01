@@ -3,7 +3,10 @@ import {Config} from './config';
 
 /**
  * Configuration class. A resolver for config namespaces which allows injection of the corresponding config segement into a class
- */
+ * @export
+ * @class Configuration
+*/
+
 @resolver()
 export class Configuration {
   /**
