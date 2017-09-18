@@ -8,7 +8,7 @@ import {FrameworkConfiguration} from 'aurelia-framework';
  * @export
  * @interface PluginDefinition
  */
-export interface PluginDefinition {
+interface PluginDefinition {
   /**
    * The moduleId as used by aurelia
    *

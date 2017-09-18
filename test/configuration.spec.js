@@ -1,5 +1,5 @@
 import {Config} from 'src/config';
-import {Configuration} from 'src/resolvers';
+import {Configuration} from 'src/configuration';
 import {Container} from 'aurelia-dependency-injection';
 import {InjectObjectTest} from 'test/resources/inject-test';
 

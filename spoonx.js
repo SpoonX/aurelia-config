@@ -38,7 +38,7 @@ module.exports = {
    */
 
     /* concat js files
-     * concat: true
    */
+     concat: true
   }
 };
