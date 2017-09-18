@@ -3,7 +3,7 @@
 System.register(['homefront', 'aurelia-dependency-injection', 'aurelia-framework'], function (_export, _context) {
   "use strict";
 
-  var Homefront, inject, Container, resolver, FrameworkConfiguration, _dec, _class, _dec2, _class2, Config, PluginManager, Configuration;
+  var Homefront, Container, resolver, inject, FrameworkConfiguration, _dec, _class, _dec2, _class2, Config, Configuration, PluginManager;
 
   
 
@@ -49,9 +49,9 @@ System.register(['homefront', 'aurelia-dependency-injection', 'aurelia-framework
     setters: [function (_homefront) {
       Homefront = _homefront.Homefront;
     }, function (_aureliaDependencyInjection) {
-      inject = _aureliaDependencyInjection.inject;
       Container = _aureliaDependencyInjection.Container;
       resolver = _aureliaDependencyInjection.resolver;
+      inject = _aureliaDependencyInjection.inject;
     }, function (_aureliaFramework) {
       FrameworkConfiguration = _aureliaFramework.FrameworkConfiguration;
     }],
@@ -70,7 +70,27 @@ System.register(['homefront', 'aurelia-dependency-injection', 'aurelia-framework
 
       _export('Config', Config);
 
-      _export('PluginManager', PluginManager = (_dec = inject(Config), _dec(_class = function () {
+      _export('Configuration', Configuration = (_dec = resolver(), _dec(_class = function () {
+        function Configuration(namespace) {
+          
+
+          this._namespace = namespace;
+        }
+
+        Configuration.prototype.get = function get(container) {
+          return container.get(Config).fetch(this._namespace);
+        };
+
+        Configuration.of = function of(namespace) {
+          return new Configuration(namespace);
+        };
+
+        return Configuration;
+      }()) || _class));
+
+      _export('Configuration', Configuration);
+
+      _export('PluginManager', PluginManager = (_dec2 = inject(Config), _dec2(_class2 = function () {
         function PluginManager(config) {
           
 
@@ -125,29 +145,9 @@ System.register(['homefront', 'aurelia-dependency-injection', 'aurelia-framework
         };
 
         return PluginManager;
-      }()) || _class));
-
-      _export('PluginManager', PluginManager);
-
-      _export('Configuration', Configuration = (_dec2 = resolver(), _dec2(_class2 = function () {
-        function Configuration(namespace) {
-          
-
-          this._namespace = namespace;
-        }
-
-        Configuration.prototype.get = function get(container) {
-          return container.get(Config).fetch(this._namespace);
-        };
-
-        Configuration.of = function of(namespace) {
-          return new Configuration(namespace);
-        };
-
-        return Configuration;
       }()) || _class2));
 
-      _export('Configuration', Configuration);
+      _export('PluginManager', PluginManager);
     }
   };
 });

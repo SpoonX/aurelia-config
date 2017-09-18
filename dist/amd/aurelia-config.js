@@ -4,7 +4,7 @@ define(['exports', 'homefront', 'aurelia-dependency-injection', 'aurelia-framewo
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.Configuration = exports.PluginManager = exports.Config = undefined;
+  exports.PluginManager = exports.Configuration = exports.Config = undefined;
   exports.configure = configure;
 
   var _dec, _class, _dec2, _class2;
@@ -47,7 +47,24 @@ define(['exports', 'homefront', 'aurelia-dependency-injection', 'aurelia-framewo
     return Config;
   }(_homefront.Homefront);
 
-  var PluginManager = exports.PluginManager = (_dec = (0, _aureliaDependencyInjection.inject)(Config), _dec(_class = function () {
+  var Configuration = exports.Configuration = (_dec = (0, _aureliaDependencyInjection.resolver)(), _dec(_class = function () {
+    function Configuration(namespace) {
+      
+
+      this._namespace = namespace;
+    }
+
+    Configuration.prototype.get = function get(container) {
+      return container.get(Config).fetch(this._namespace);
+    };
+
+    Configuration.of = function of(namespace) {
+      return new Configuration(namespace);
+    };
+
+    return Configuration;
+  }()) || _class);
+  var PluginManager = exports.PluginManager = (_dec2 = (0, _aureliaDependencyInjection.inject)(Config), _dec2(_class2 = function () {
     function PluginManager(config) {
       
 
@@ -102,23 +119,6 @@ define(['exports', 'homefront', 'aurelia-dependency-injection', 'aurelia-framewo
     };
 
     return PluginManager;
-  }()) || _class);
-  var Configuration = exports.Configuration = (_dec2 = (0, _aureliaDependencyInjection.resolver)(), _dec2(_class2 = function () {
-    function Configuration(namespace) {
-      
-
-      this._namespace = namespace;
-    }
-
-    Configuration.prototype.get = function get(container) {
-      return container.get(Config).fetch(this._namespace);
-    };
-
-    Configuration.of = function of(namespace) {
-      return new Configuration(namespace);
-    };
-
-    return Configuration;
   }()) || _class2);
   function configure(use, callback) {
     var pluginManager = use.container.get(PluginManager);

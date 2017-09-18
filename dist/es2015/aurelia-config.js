@@ -1,12 +1,26 @@
 var _dec, _class, _dec2, _class2;
 
 import { Homefront } from 'homefront';
-import { inject, Container, resolver } from 'aurelia-dependency-injection';
+import { Container, resolver, inject } from 'aurelia-dependency-injection';
 import { FrameworkConfiguration } from 'aurelia-framework';
 
 export let Config = class Config extends Homefront {};
 
-export let PluginManager = (_dec = inject(Config), _dec(_class = class PluginManager {
+export let Configuration = (_dec = resolver(), _dec(_class = class Configuration {
+  constructor(namespace) {
+    this._namespace = namespace;
+  }
+
+  get(container) {
+    return container.get(Config).fetch(this._namespace);
+  }
+
+  static of(namespace) {
+    return new Configuration(namespace);
+  }
+}) || _class);
+
+export let PluginManager = (_dec2 = inject(Config), _dec2(_class2 = class PluginManager {
   constructor(config) {
     this.config = config;
   }
@@ -44,20 +58,6 @@ export let PluginManager = (_dec = inject(Config), _dec(_class = class PluginMan
     });
 
     return Promise.all(loadConfigs).then(() => this.config.merge(pluginConfigs.concat(appConfigs)));
-  }
-}) || _class);
-
-export let Configuration = (_dec2 = resolver(), _dec2(_class2 = class Configuration {
-  constructor(namespace) {
-    this._namespace = namespace;
-  }
-
-  get(container) {
-    return container.get(Config).fetch(this._namespace);
-  }
-
-  static of(namespace) {
-    return new Configuration(namespace);
   }
 }) || _class2);
 

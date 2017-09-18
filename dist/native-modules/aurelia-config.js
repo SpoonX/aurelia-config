@@ -7,7 +7,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 import { Homefront } from 'homefront';
-import { inject, Container, resolver } from 'aurelia-dependency-injection';
+import { Container, resolver, inject } from 'aurelia-dependency-injection';
 import { FrameworkConfiguration } from 'aurelia-framework';
 
 export var Config = function (_Homefront) {
@@ -22,7 +22,25 @@ export var Config = function (_Homefront) {
   return Config;
 }(Homefront);
 
-export var PluginManager = (_dec = inject(Config), _dec(_class = function () {
+export var Configuration = (_dec = resolver(), _dec(_class = function () {
+  function Configuration(namespace) {
+    
+
+    this._namespace = namespace;
+  }
+
+  Configuration.prototype.get = function get(container) {
+    return container.get(Config).fetch(this._namespace);
+  };
+
+  Configuration.of = function of(namespace) {
+    return new Configuration(namespace);
+  };
+
+  return Configuration;
+}()) || _class);
+
+export var PluginManager = (_dec2 = inject(Config), _dec2(_class2 = function () {
   function PluginManager(config) {
     
 
@@ -77,24 +95,6 @@ export var PluginManager = (_dec = inject(Config), _dec(_class = function () {
   };
 
   return PluginManager;
-}()) || _class);
-
-export var Configuration = (_dec2 = resolver(), _dec2(_class2 = function () {
-  function Configuration(namespace) {
-    
-
-    this._namespace = namespace;
-  }
-
-  Configuration.prototype.get = function get(container) {
-    return container.get(Config).fetch(this._namespace);
-  };
-
-  Configuration.of = function of(namespace) {
-    return new Configuration(namespace);
-  };
-
-  return Configuration;
 }()) || _class2);
 
 export function configure(use, callback) {

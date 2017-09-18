@@ -1,5 +1,5 @@
 import {Homefront} from 'homefront';
-import {inject,Container,resolver} from 'aurelia-dependency-injection';
+import {Container,resolver,inject} from 'aurelia-dependency-injection';
 import {FrameworkConfiguration} from 'aurelia-framework';
 
 
@@ -15,12 +15,58 @@ import {FrameworkConfiguration} from 'aurelia-framework';
 export class Config extends Homefront {}
 
 /**
+ * Configuration class. A resolver for config namespaces which allows injection of the corresponding config segement into a class
+ * @export
+ * @class Configuration
+*/
+
+@resolver()
+export class Configuration {
+  /**
+   * @param {string} _namespace  The namespace
+   */
+  _namespace: string;
+
+  /**
+   * Construct the resolver with the specified namespace.
+   *
+   * @param {string} namespace
+   */
+  constructor(namespace: string) {
+    this._namespace   = namespace;
+  }
+
+  /**
+   * Resolve for namespace.
+   *
+   * @param {Container} container
+   * @return {{}}
+   *
+   * @memberOf Configuration
+   */
+  get(container: Container): {} {
+    return container.get(Config).fetch(this._namespace);
+  }
+
+  /**
+   * Get a new resolver for `namespace`.
+   *
+   * @param {string} namespace The namespace
+   *
+   * @return {Configuration}  Resolves to the config segement of the namespace
+   */
+  static of(namespace: string): Configuration {
+    return new Configuration(namespace);
+  }
+}
+
+/**
  * The PluginDefinition interface
  *
  * @export
  * @interface PluginDefinition
  */
-export interface PluginDefinition {
+interface PluginDefinition {
   /**
    * The moduleId as used by aurelia
    *
@@ -131,49 +177,6 @@ export class PluginManager {
 
     // load plugin configs, then merges plugin configs and app configs in the right order.
     return Promise.all(loadConfigs).then(() => this.config.merge(pluginConfigs.concat(appConfigs)));
-  }
-}
-
-/**
- * Configuration class. A resolver for config namespaces which allows injection of the corresponding config segement into a class
- */
-@resolver()
-export class Configuration {
-  /**
-   * @param {string} _namespace  The namespace
-   */
-  _namespace: string;
-
-  /**
-   * Construct the resolver with the specified namespace.
-   *
-   * @param {string} namespace
-   */
-  constructor(namespace: string) {
-    this._namespace   = namespace;
-  }
-
-  /**
-   * Resolve for namespace.
-   *
-   * @param {Container} container
-   * @return {{}}
-   *
-   * @memberOf Configuration
-   */
-  get(container: Container): {} {
-    return container.get(Config).fetch(this._namespace);
-  }
-
-  /**
-   * Get a new resolver for `namespace`.
-   *
-   * @param {string} namespace The namespace
-   *
-   * @return {Configuration}  Resolves to the config segement of the namespace
-   */
-  static of(namespace: string): Configuration {
-    return new Configuration(namespace);
   }
 }
 
